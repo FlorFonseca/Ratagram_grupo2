@@ -12,7 +12,7 @@ export default function Login() {
 
         try {
             // Realizamos la solicitud al backend
-            const response = await fetch('localhost:3001/api/auth/login', { // Cambia la URL según sea necesario
+            const response = await fetch('http://localhost:3000/api/auth/login', { // Cambia la URL según sea necesario
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
