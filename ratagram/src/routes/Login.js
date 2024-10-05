@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 //import DefaultLayout from "../layout/DefaultLayout";
 
+
 export default function Login() {
     const [email, setEmail] = useState(''); // Capturar email o username
     const [password, setPassword] = useState(''); // Capturar password
@@ -59,6 +60,7 @@ export default function Login() {
                 />
                 
                 <button type="submit">Login</button>
+                <button>SignUp</button>
 
                 {message && <p>{message}</p>} {/* Muestra el mensaje */}
             </form>
