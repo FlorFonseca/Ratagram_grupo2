@@ -1,11 +1,13 @@
 import './App.css';
-import LoginComponent from './routes/Login.js';
+//import LoginComponent from './routes/Login.js';
+import SignUp from './routes/Signup';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <LoginComponent/>
+        {/* <LoginComponent/> */}
+        <SignUp/>
       </header>
     </div>
   );
