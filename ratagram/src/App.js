@@ -1,13 +1,15 @@
 import './App.css';
 //import LoginComponent from './routes/Login.js';
-import SignUp from './routes/Signup';
+// import SignUp from './routes/Signup';
+import Home from './routes/Home';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         {/* <LoginComponent/> */}
-        <SignUp/>
+        {/* <SignUp/> */}
+        <Home/>
       </header>
     </div>
   );
