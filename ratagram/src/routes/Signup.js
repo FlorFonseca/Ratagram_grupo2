@@ -27,7 +27,7 @@ export default function Signup() {
             if (response.ok) {
                 // Si el registro fue exitoso
                 setMessage('Registro exitoso');
-                navigate('/login'); // Redirigir al login después del registro exitoso
+                navigate('/'); // Redirigir al login después del registro exitoso
             } else {
                 // Si el registro falló, mostramos el mensaje de error del backend
                 setMessage(data.message || 'Error en el registro');

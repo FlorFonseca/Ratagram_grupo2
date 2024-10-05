@@ -38,7 +38,10 @@ export default function Login() {
             console.error('Error en la autenticación:', error);
         }
     };
-
+    const goToSignUp = () => {
+        navigate('/signup'); // Aquí es donde se realiza la navegación a /signup
+    };
+    
     return (
         <form className="form" onSubmit={handleLogin}>
             <h1>Login</h1>
@@ -59,7 +62,8 @@ export default function Login() {
             />
             
             <button type="submit">Login</button>
-            <button>Sign Up</button>
+            <button onClick={goToSignUp}>Sign Up</button>
+
 
             {message && <p>{message}</p>} {/* Muestra el mensaje */}
         </form>
