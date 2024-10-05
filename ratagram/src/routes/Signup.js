@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
 
-export default function SignUp() {
+export default function Signup() {
     const [email, setEmail] = useState(''); // Capturar email
     const [username, setUserName] = useState(''); // Capturar username
     const [password, setPassword] = useState(''); // Capturar password
     const [message, setMessage] = useState(''); // Para mostrar mensajes de error o éxito
-    // const navigate = useNavigate(); // Para navegar entre rutas
+    const navigate = useNavigate(); // Creamos navigate para redirigir entre rutas
 
     // Función que se ejecuta cuando se envía el formulario
     const handleSignUp = async (e) => {
@@ -27,8 +27,7 @@ export default function SignUp() {
             if (response.ok) {
                 // Si el registro fue exitoso
                 setMessage('Registro exitoso');
-                // Redirigir al login después del registro exitoso
-                // navigate('/login');
+                navigate('/'); // Redirigir al login después del registro exitoso
             } else {
                 // Si el registro falló, mostramos el mensaje de error del backend
                 setMessage(data.message || 'Error en el registro');
@@ -39,11 +38,6 @@ export default function SignUp() {
             console.error('Error en el registro:', error);
         }
     };
-
-    // const goToLogin = () => {
-    //     // Redirige a la página de Log In
-    //     navigate('/login');
-    // };
 
     return (
         <form className="form" onSubmit={handleSignUp}>
@@ -73,8 +67,6 @@ export default function SignUp() {
             />
 
             <button type="submit">Registrar</button>
-
-            {/* <button type="button" onClick={goToLogin}>Volver al Log In</button> */}
 
             {message && <p>{message}</p>} {/* Muestra el mensaje */}
         </form>
