@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true); // Autenticado si hay token
+      console.log(token);
     }
   }, []);
 

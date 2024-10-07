@@ -62,6 +62,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)} // Actualiza el estado del password
                 required
+
             />
 
             <div className="LoginButtonSection">
