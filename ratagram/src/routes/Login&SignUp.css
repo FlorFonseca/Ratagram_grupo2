@@ -1,0 +1,48 @@
+.form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+}
+
+.titulo{
+    display:flex;
+    grid-column: 2;
+}
+
+.Labels {
+    display: flex;
+    grid-column: 2;
+    color: #202020;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.inputLandS {
+    width: 359px;
+    height: 50px;
+    grid-column: 2;
+    border-radius: 10px;
+    background: #D9D9D9;
+}
+
+
+.LoginButtonSection {
+    width: 293px;
+    height: 100px;
+    grid-column: 2;
+}
+
+
+.LoginandSignUp-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:10px;
+    width: 345px;
+    height: 50px;
+    border-radius: 10px;
+    background: #BD61DE;
+}

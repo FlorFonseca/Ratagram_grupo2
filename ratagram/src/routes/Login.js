@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider'; // Si tienes un contexto para manejar autenticación
+import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
+import './Login&SignUp.css';
+
 
 export default function Login() {
     const [email, setEmail] = useState(''); 
@@ -56,25 +58,33 @@ export default function Login() {
 
     return (
         <form className="form" onSubmit={handleLogin}>
-            <h1>Login</h1>
-            <label>Email</label>
+            <h1 className="titulo">Ratagram </h1>
+            <label className="Labels">Email</label>
             <input
+                className="inputLandS"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
             />
-            
-            <label>Password</label>
+
+            <label className="Labels">Password</label>
             <input
+                className="inputLandS"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+
             />
-            
-            <button type="submit">Login</button>
-            <button type="button" onClick={goToSignUp}>Sign Up</button>
+
+            <div className="LoginButtonSection">
+                <div className="group1">
+                    <button className="LoginandSignUp-btn" type="submit">Login</button>
+                    <button className="LoginandSignUp-btn" onClick={goToSignUp}>Sign Up</button>
+                </div>
+            </div>
+
 
             {message && <p>{message}</p>} {/* Mostrar el mensaje */}
         </form>

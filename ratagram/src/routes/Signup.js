@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
+import './Login&SignUp.css';
 
 export default function Signup() {
     const [email, setEmail] = useState(''); // Capturar email
@@ -41,33 +42,39 @@ export default function Signup() {
 
     return (
         <form className="form" onSubmit={handleSignUp}>
-            <h1>Sign Up</h1>
-            <label>Email</label>
+            <h1 className="titulo">Sign Up</h1>
+            <label className="Labels">Email</label>
             <input
+                className="inputLandS"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)} // Actualiza el estado del email
                 required
             />
 
-            <label>User Name</label>
+            <label className="Labels">User Name</label>
             <input
+                className="inputLandS"
                 type="text"
                 value={username}
                 onChange={(e) => setUserName(e.target.value)} // Actualiza el estado del userName
                 required
             />
 
-            <label>Password</label>
+            <label className="Labels">Password</label>
             <input
+                className="inputLandS"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)} // Actualiza el estado del password
                 required
             />
 
-            <button type="submit">Registrar</button>
-
+            <div className="LoginButtonSection">
+                <div className="group1">
+                    <button className="LoginandSignUp-btn" type="submit">Registrar</button>
+                </div>
+            </div>
             {message && <p>{message}</p>} {/* Muestra el mensaje */}
         </form>
     );
