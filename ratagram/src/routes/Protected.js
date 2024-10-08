@@ -2,7 +2,8 @@ import { Outlet, Navigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
 
 export default function Protected() {
-  const { isAuthenticated } = useAuth(); // Obtener el estado de autenticación
+  const { isAuthenticated } = useAuth();
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
+  // Verifica si el usuario está autenticado antes de mostrar el contenido protegido
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" />; // Si no está autenticado, redirige al login
 }

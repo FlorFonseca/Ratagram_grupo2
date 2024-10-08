@@ -13,16 +13,15 @@ import { AuthProvider } from './auth/AuthProvider';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/', // Ruta pública para el login
     element: <Login />
   },
   {
-    path: '/signup',
+    path: '/signup', // Ruta pública para el registro
     element: <Signup />
   },
   {
-    path: '/',
-    element: <Protected />, // Rutas protegidas
+    element: <Protected />, // Agrupamos las rutas protegidas aquí
     children: [
       { path: '/myfeed', element: <MyFeed /> },
       { path: '/myprofile', element: <MyProfile /> },

@@ -1,19 +1,20 @@
-// auth/AuthProvider.js
 import { useState, createContext, useContext, useEffect } from 'react';
 
-// Crear el contexto de autenticación
 const AuthContext = createContext();
 
 // Proveedor del contexto de autenticación
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = localStorage.getItem('token');
+    return !!token; // Retorna true si hay token, false si no hay
+  });
 
-  // Verificar si hay un token en el localStorage cuando se monta el componente
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true); // Autenticado si hay token
-      console.log(token);
+    } else {
+      setIsAuthenticated(false); // No autenticado si no hay token
     }
   }, []);
 
