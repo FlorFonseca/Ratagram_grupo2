@@ -1,0 +1,10 @@
+.feedRatagram {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+}
+
+.titulo{
+    display:flex;
+    grid-column: 2;
+}
