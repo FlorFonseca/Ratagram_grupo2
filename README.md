@@ -16,10 +16,10 @@ Para la primer entrega del proyecto se implementaron las funcionalidades del man
 Lo primero que se encuentra un usuario al ingresar a “Ratagram” es la página de `Login`. Aquí se deben rellenar los campos con un _email_ y una _password_. 
 Si el usuario ya fue registrado anteriormente puede dar click en el botón de _Login_ para poder redirigirse a su _feed_, de lo contrario no se lo dejará ingresar y deberá clickear el botón _Sign Up_ y así registrarse como un nuevo usuario.
 
-## Sign Up
+### Sign Up
 En esta pantalla el usuario deberá crearse su cuenta dentro de Ratagram. Para esto deberá rellenar los campos de _User Name_, _email_ y _password_ de acuerdo a sus preferencias. Al completar el formulario, se debe clickear el botón _Sign Up_ el cual lo redirigirá a la página de _Login_, donde deberá ingresar las credenciales de su nueva cuenta para poder acceder, por ejemplo, a su _feed_ y su _perfil_.
 
-## Feed
+### Feed
 Una vez validado el usuario, en el _feed_ se mostrarán las fotos que otros usuarios de Ratagram hayan subido.
 
 
