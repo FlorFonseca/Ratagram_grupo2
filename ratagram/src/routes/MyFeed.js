@@ -1,29 +1,36 @@
+/**
+ * Mostramos el feed de cada usuario, aquí se ven las publicaciones que los diferentes usuarios logueados suben a 
+ * Ratagram.
+ */
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
+import '../styles/FeedStyle.css';
 
 export default function MyFeed() {
-    const navigate = useNavigate(); // Creamos navigate para redirigir entre rutas
-    const [posts, setPosts] = useState([]); // Estado para almacenar los posts
-    const [message, setMessage] = useState(''); // Para mostrar mensajes de error o éxito
+    const navigate = useNavigate(); // navigate nos permitirá poder redireccionar la página a la ruta que sea necesaria en el momento
+    const [posts, setPosts] = useState([]); // este useState permite almacenar los diferentes uploads (posts) que hacen los usuarios
+    const [message, setMessage] = useState(''); // creamos un mensaje ya sea para indicar un cargado del feed exitoso o algún error. Esto nos sirve para verificar la respuesta del backend
 
     // Función para obtener los posts del feed
     const handleFeed = async () => {
         try {
+            //Acá esperamos la respuesta del backend al hacer un GET del feed
             const response = await fetch('http://localhost:3000/api/posts/feed', {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Asegúrate de incluir el token
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // En el backend se muestra una condición "&&" donde se necesita que el header contenga la autorización, incluyendo el 'Bearer' y el token, por eso lo pusimos así.
                 }
             });
 
-            const data = await response.json();
-            console.log(data); // Verifica la respuesta de la API
+            const data = await response.json(); //Estos son los posts que obtenemos
+            //console.log(data); // Esto es solo para verificar la respuesta del backend
 
             if (response.ok) {
-                setPosts(data.posts || []); // Asegúrate de que `data.posts` tenga un valor
+                setPosts(data || []); //Acá cargamos los posts que obtenemos de la db
                 setMessage('Feed cargado exitosamente');
             } else {
                 setMessage(data.message || 'Error al cargar el feed');
-                // Si la respuesta indica que no está autorizado, puedes redirigir al login
+                // Si, por alguna razón, la respuesta indica que el usuario no está autorizado, entonces redirigimos al login. Esto funciona como un doble chequeo, ya que al feed no se debería acceder si el usuario no está logueado (logica ya explicada en Login.js)
                 if (response.status === 401) {
                     localStorage.removeItem('token'); // Elimina el token si no está autorizado
                     navigate('/login'); // Redirige al login
@@ -31,12 +38,12 @@ export default function MyFeed() {
             }
         } catch (error) {
             setMessage('Error en el servidor');
-            console.error('Error en la carga del feed:', error);
+            console.error('Error al cargar el feed: ', error);
         }
     };
 
     useEffect(() => {
-        handleFeed(); // Cargar los posts al montar el componente
+        handleFeed(); // Cargar los posts al montar el componente feed
     }, []);
 
     return (
@@ -45,8 +52,9 @@ export default function MyFeed() {
             {message && <p>{message}</p>} {/* Muestra el mensaje */}
             <ul>
                 {posts && posts.length > 0 ? (
-                    posts.map((post, index) => (
-                        <li key={index}>{post.content}</li> // Cambia 'content' según la estructura de tus posts
+                    posts.map((post) => (
+                        <li key={post.createdAt}>{post.imageUrl}</li> //Decidimos utilizar como key el campo de createdAt ya que nos pareció el que cumple con la condición de ser unico. 
+                                                                    //Como aún no tenemos la funcionalidad de cargar la imagen a mongo y poder extraerla completamente, decidimos, por el momento, mostrar la url de la imágen en el feed
                     ))
                 ) : (
                     <li>No hay publicaciones disponibles.</li> // Mensaje si no hay posts

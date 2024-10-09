@@ -1,4 +1,4 @@
-import './App.css';
+import './styles/App.css';
 //import LoginComponent from './routes/Login.js';
 // import SignUp from './routes/Signup';
 import Home from './routes/Home';
