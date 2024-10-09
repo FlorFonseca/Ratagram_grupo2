@@ -1,3 +1,7 @@
+/**
+ * En index definimos todas las rutas de Ratagram tanto las publicas como las privadas
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.css';
@@ -21,7 +25,7 @@ const router = createBrowserRouter([
     element: <Signup />
   },
   {
-    element: <Protected />, // Agrupamos las rutas protegidas aquí
+    element: <Protected />, // Acá agrupamos las rutas privadas o que están "Protected". Con el Outlet, en el archivo Protected.js, una vez que se verifica la autenticación del usuario, damos permiso a que se pueda acceder a los hijos de Protected (las rutas que se definen acá) 
     children: [
       { path: '/myfeed', element: <MyFeed /> },
       { path: '/myprofile', element: <MyProfile /> },
@@ -34,8 +38,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AuthProvider> {/* Envolvemos la aplicación con el AuthProvider */}
-      <RouterProvider router={router} />
+    <AuthProvider> 
+      <RouterProvider router={router} />{/*Router Provider es un children de AuthProvider, entonces se va a compartir el contexto guardado por AuthProvider */}
     </AuthProvider>
   </React.StrictMode>
 );
