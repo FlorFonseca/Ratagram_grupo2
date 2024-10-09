@@ -8,7 +8,11 @@ Para la primer entrega del proyecto se implementaron las funcionalidades del man
 
 ## División en carpetas
 `./src/auth`: En esta carpeta se encuentra el `AuthProvider`, encargado de manejar la autenticación de los usuarios.
+
+
 `./src/routes`: En esta carpeta se encuentras los diferentes componentes que serán luego las rutas de la página. También se encuentra el archivo `Protected`, el cual define las condiciones que se deben cumplir para acceder a determinadas rutas protegidas.
+
+
 `./src/styles`: En esta carpeta se encuentran todos los archivos`.css` que le dan el estilo a las diferentes páginas.
 
 ## Manual de usuario
