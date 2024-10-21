@@ -20,7 +20,7 @@ export default function Signup() {
 
         try {
             //Acá esperamos la respuesta del backend al hacerle un post con la información necesaria para crear el usuario
-            const response = await fetch('http://localhost:3000/api/auth/register', {
+            const response = await fetch('http://localhost:3001/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

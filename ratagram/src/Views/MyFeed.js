@@ -17,7 +17,7 @@ export default function MyFeed() {
   const handleFeed = async () => {
     try {
       //Acá esperamos la respuesta del backend al hacer un GET del feed
-      const response = await fetch("http://localhost:3000/api/posts/feed", {
+      const response = await fetch("http://localhost:3001/api/posts/feed", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // En el backend se muestra una condición "&&" donde se necesita que el header contenga la autorización, incluyendo el 'Bearer' y el token, por eso lo pusimos así.
         },

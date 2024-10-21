@@ -5,7 +5,7 @@ import "../styles/Publicacion.css";
 import { useNavigate } from "react-router-dom";
 
 const deletePublicacion = async (id) => {
-  const publicacionDelete = await fetch("http://localhost:3000/api/posts/${id}", {
+  const publicacionDelete = await fetch("http://localhost:3001/api/posts/${id}", {
     method: "DELETE",
   });
 

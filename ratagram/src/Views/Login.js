@@ -31,7 +31,7 @@ export default function Login() {
 
         try {
             //Acá esperamos la respuesta del backend al hacerle un post con la información del usuario ingresada.
-            const response = await fetch('http://localhost:3000/api/auth/login', {
+            const response = await fetch('http://localhost:3001/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
