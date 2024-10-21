@@ -52,18 +52,20 @@ export default function MyFeed() {
       <h1 className="titulo">Feed</h1>
       {message && <p>{message}</p>} {/* Muestra el mensaje */}
       {posts && posts.length > 0 ? (
-        posts.map((post) => (
-          <Publicacion
-            key={post.createdAt}
-            username={post.user.username}
-            id={post.user._id}
-            refreshFeed={handleFeed}
-            photo={post.imageUrl}
-            description={post.caption}
-          /> // Utilizamos el componente Publicacion para mostrar los posts
-          //Decidimos utilizar como key el campo de createdAt ya que nos pareció el que cumple con la condición de ser unico.
-          //Como aún no tenemos la funcionalidad de cargar la imagen a mongo y poder extraerla completamente, decidimos, por el momento, mostrar la url de la imágen en el feed
-        ))
+        posts
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Ordenar posts por createdAt en orden descendente
+          .map((post) => (
+            <Publicacion
+              key={post.createdAt}
+              username={post.user.username}
+              id={post.user._id}
+              refreshFeed={handleFeed}
+              photo={post.imageUrl}
+              description={post.caption}
+            /> // Utilizamos el componente Publicacion para mostrar los posts
+            //Decidimos utilizar como key el campo de createdAt ya que nos pareció el que cumple con la condición de ser unico.
+            //Como aún no tenemos la funcionalidad de cargar la imagen a mongo y poder extraerla completamente, decidimos, por el momento, mostrar la url de la imágen en el feed
+          ))
       ) : (
         <li>No hay publicaciones disponibles.</li> // Mensaje si no hay posts
       )}
