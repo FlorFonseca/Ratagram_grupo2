@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Importamos useNavigate
 import "../styles/FeedStyle.css";
-import Publicacion from "./Publicacion";
+import Publicacion from "../Components/Publicacion";
 
 export default function MyFeed() {
   const navigate = useNavigate(); // navigate nos permitirá poder redireccionar la página a la ruta que sea necesaria en el momento
