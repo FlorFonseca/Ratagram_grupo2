@@ -1,0 +1,35 @@
+.Publicacion {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.publicacion-content {
+  padding: 16px;
+}
+
+.publicacion-title {
+  font-size: 1.25rem;
+  margin: 0 0 8px;
+}
+
+.publicacion-wrapp-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.publicacion-button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #38cacf;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.publicacion-button:hover {
+  background-color: #32a4a8;
+}

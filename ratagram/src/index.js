@@ -11,7 +11,7 @@ import Signup from './routes/Signup';
 import MyProfile from './routes/MyProfile';
 import FriendProfile from './routes/FriendProfile';
 import MyFeed from './routes/MyFeed';
-import Posts from './routes/Posts';
+import Posts from './routes/Publicacion';
 import Protected from './routes/Protected';
 import { AuthProvider } from './auth/AuthProvider';
 
