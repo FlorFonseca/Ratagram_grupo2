@@ -6,12 +6,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Login from './routes/Login';
-import Signup from './routes/Signup';
-import MyProfile from './routes/MyProfile';
-import FriendProfile from './routes/FriendProfile';
-import MyFeed from './routes/MyFeed';
-import Posts from './routes/Publicacion';
+import Login from './Views/Login';
+import Signup from './Views/Signup';
+import MyProfile from './Views/MyProfile';
+import FriendProfile from './Views/FriendProfile';
+import MyFeed from './Views/MyFeed';
+import Posts from './Components/Publicacion';
 import Protected from './routes/Protected';
 import { AuthProvider } from './auth/AuthProvider';
 
