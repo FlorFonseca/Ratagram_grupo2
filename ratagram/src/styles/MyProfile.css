@@ -1,0 +1,102 @@
+/* Contenedor principal del perfil - ocupa toda la pantalla */
+.profile-container {
+  max-width: 80vw;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Header del perfil con elementos alineados a izquierda y derecha */
+.profile-header {
+  display: flex;
+  justify-content: left;
+  align-items: flex-start;
+  margin-bottom: 2em;
+}
+
+/* Imagen del perfil alineada a la izquierda */
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+}
+
+/* Información del usuario alineada a la izquierda */
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1em;
+  margin-right: 5em;
+  margin-top: 1em;
+}
+
+.profile-info h3 {
+  margin: 0;
+}
+
+.profile-info p {
+  font-size: 0.8em;
+  color: #666;
+  margin: 5px 0;
+}
+
+.posts-stats {
+  text-align: center;
+  margin-right: 2em;
+}
+
+.posts-stats p {
+  font-size: 0.8em;
+  color: #666;
+}
+
+.friends-stats {
+  text-align: center;
+  margin-right: 2em;
+}
+
+.friends-stats p {
+  font-size: 0.8em;
+  color: #666;
+}
+
+/* Botón de edición del perfil */
+.profile-editBtn button {
+  width: 100%;
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 2em;
+}
+
+.profile-editBtn button:hover {
+  background-color: #d6d2d2;
+  color: black;
+}
+
+/* Cuadrícula de publicaciones */
+.profile-posts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+/* Publicación individual */
+.user-publicacion {
+  width: 100%;
+  padding-bottom: 100%; /* Mantiene proporción cuadrada */
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
