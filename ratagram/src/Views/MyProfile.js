@@ -15,10 +15,33 @@ const MyProfile = () => {
   const [postsStatistics, setPostsStatistics] = useState(0);
   const [friendsStatistics, setFriendsStatistics] = useState(0);
   const [message, setMessage] = useState("");
+  const token = localStorage.getItem("token");
+
+  const getUserPosts = async (userData) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/posts/feed/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const postsData = await response.json();
+        //console.log(postsData);
+        if (userData) {
+          const filteredPosts = postsData.filter(
+            (post) => post.user._id === userData._id
+          );
+          setPosts(filteredPosts);
+        }
+      }
+    } catch (error) {
+      setMessage("Error en el servidor");
+    }
+  };
 
   useEffect(() => {
     const handleProfile = async () => {
-      const token = localStorage.getItem("token");
       try {
         const response = await fetch(
           `http://localhost:3001/api/user/profile/${user.id}`,
@@ -28,37 +51,11 @@ const MyProfile = () => {
             },
           }
         );
-        if (!response.ok) {
-          throw new Error("Error al obtener perfil");
+        if (response.ok) {
+          const DataUser = await response.json();
+          setUserData(DataUser);
+          setMessage("Perfil cargado");
         }
-        const DataUser = await response.json();
-        setMessage("Perfil cargado");
-        setUserData(DataUser);
-      } catch (error) {
-        setMessage("Error en el servidor");
-      }
-    };
-
-    const getUserPosts = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        //console.log(user.id); se está obteniendo bien el id
-        const response = await fetch(
-          `http://localhost:3001/api/user/posts/${user.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          setMessage("Error al cargar las publicaciones");
-          return;
-        }
-        const postsData = await response.json();
-        //console.log(postsData);
-        setPosts(postsData);
       } catch (error) {
         setMessage("Error en el servidor");
       }
@@ -66,14 +63,15 @@ const MyProfile = () => {
 
     if (user) {
       handleProfile();
-      getUserPosts();
     }
-  }, [user]);
+  }, [user, token]);
 
-  const handlePostStatistics = () => {
-    setPostsStatistics(posts.length);
-    return postsStatistics;
-  };
+  useEffect(() => {
+    if (userData) {
+      getUserPosts(userData); // Cargar posts solo cuando userData esté listo
+    }
+  }, [userData]);
+
 
   const handleOpenModal = (post) => {
     setSelectedPost(post);
