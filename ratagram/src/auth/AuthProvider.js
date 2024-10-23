@@ -10,6 +10,7 @@ https://es.react.dev/reference/react/useContext
  */
 
 import { useState, createContext, useContext, useEffect } from 'react';
+import {jwtDecode} from 'jwt-decode';
 
 //Creamos el objeto AuthContext
 const AuthContext = createContext();
@@ -21,11 +22,14 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem('token'); //Tomamos el token del localStorage
     return !!token; // Los simbolos "!!" nos van a decir si el token existe o no, ya que "token" puede ser ya sea true o false.
   });
+  const [user, setUser] = useState(null);
 
   //Aquí es donde se setea el valor de isAuthenticated, dependiendo de si se encontró o no el token en el localStorage
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
+      const decodedToken = jwtDecode(token);
+      setUser(decodedToken);
       setIsAuthenticated(true); // Autenticado si hay token
     } else {
       setIsAuthenticated(false); // No autenticado si no hay token
@@ -33,7 +37,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated,user }}>
       {children}
     </AuthContext.Provider>
   );
