@@ -8,6 +8,7 @@ import ProfilePublicacion from "../Components/ProfilePublicacion";
 import { useAuth } from "../auth/AuthProvider";
 import Modal from "../Components/Modal";
 import Publicacion from "../Components/Publicacion";
+import handleDeleteClick from "../Components/Publicacion";
 import "../styles/MyProfile.css";
 
 const MyProfile = () => {
@@ -117,6 +118,9 @@ const MyProfile = () => {
               description={selectedPost.caption}
             ></Publicacion>
           </div>
+          <button className="publicacion-button" onClick={handleDeleteClick}>
+            Borrar publicación.
+          </button>
         </Modal>
       )}
     </div>

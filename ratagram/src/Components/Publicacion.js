@@ -36,9 +36,6 @@ const Publicacion = ({ username, id, refreshFeed, photo, description  }) => {
           <button className="publicacion-button" onClick={handleDetailsClick}>
             Detalle
           </button>
-          <button className="publicacion-button" onClick={handleDeleteClick}>
-            Borrar
-          </button>
         </div>
       </div>
     </div>
