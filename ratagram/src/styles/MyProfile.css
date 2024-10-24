@@ -1,4 +1,4 @@
-/* Contenedor principal del perfil - ocupa toda la pantalla */
+
 .profile-container {
   max-width: 80vw;
   margin: 0 auto;
@@ -8,7 +8,6 @@
   box-sizing: border-box;
 }
 
-/* Header del perfil con elementos alineados a izquierda y derecha */
 .profile-header {
   display: flex;
   justify-content: left;
@@ -16,7 +15,6 @@
   margin-bottom: 2em;
 }
 
-/* Imagen del perfil alineada a la izquierda */
 .profile-pic {
   width: 100px;
   height: 100px;
@@ -26,7 +24,6 @@
   margin-right: 20px;
 }
 
-/* Información del usuario alineada a la izquierda */
 .profile-info {
   display: flex;
   flex-direction: column;
@@ -65,7 +62,6 @@
   color: #666;
 }
 
-/* Botón de edición del perfil */
 .profile-editBtn button {
   width: 100%;
   background-color: #f0f0f0;
@@ -84,19 +80,176 @@
   color: black;
 }
 
-/* Cuadrícula de publicaciones */
 .profile-posts {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
 }
 
-/* Publicación individual */
 .user-publicacion {
   width: 100%;
-  padding-bottom: 100%; /* Mantiene proporción cuadrada */
+  padding-bottom: 100%;
   background-size: cover;
   background-position: center;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Pantallas medianas y grandes */
+@media (max-width: 1024px) {
+  .profile-container {
+    max-width: 90vw;
+  }
+
+  .profile-info {
+    margin-right: 2em;
+  }
+
+  .profile-posts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Pantallas entre 768px y 480px */
+@media (max-width: 768px) {
+  .profile-container {
+    max-width: 95vw;
+    padding: 10px;
+  }
+
+  .profile-header {
+    justify-content: flex-start; 
+    text-align: left; 
+    flex-wrap: nowrap; 
+  }
+
+  .profile-pic {
+    width: 8em;
+    height: 8em;
+    border-radius: 50%; 
+    object-fit: cover; 
+    margin-right: 10px; 
+  }
+
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1em;
+    margin-right: 3em;
+    margin-top: 1em;
+  }
+
+  .profile-info h3 {
+    font-size: 1.2em;
+  }
+
+  .profile-info p {
+    font-size: 0.9em;
+  }
+
+  .posts-stats,
+  .friends-stats {
+    margin-right: 1em;
+    font-size: 1em;
+  }
+
+  button {
+    font-size: 1em;
+  }
+
+  .profile-posts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Pantallas pequeñas - máximo 480px */
+@media (max-width: 480px) {
+  .profile-container {
+    max-width: 95vw;
+    padding: 10px;
+  }
+
+  .profile-header {
+    justify-content: flex-start;
+    text-align: left;
+    flex-wrap: nowrap;
+  }
+
+  .profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+  .profile-info {
+    margin-left: 10px;
+    margin-right: 1em;
+  }
+
+  .profile-info h3 {
+    font-size: 1em;
+  }
+
+  .profile-info p {
+    font-size: 0.8em;
+  }
+
+  .posts-stats,
+  .friends-stats {
+    margin-right: 1em;
+    font-size: 0.8em;
+  }
+
+  button {
+    font-size: 0.9em;
+    padding: 8px;
+  }
+
+  .profile-posts {
+    grid-template-columns: 1fr;
+  }
+
+  .user-publicacion {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Pantallas muy pequeñas - máximo 320px */
+@media (max-width: 320px) {
+  .profile-container {
+    max-width: 95vw;
+    padding: 5px;
+  }
+
+  .profile-header {
+    flex-direction: column; 
+    align-items: center;
+  }
+
+  .profile-pic {
+    width: 60px;
+    height: 60px;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .profile-info {
+    margin-left: 0;
+    margin-right: 0;
+    text-align: center;
+  }
+
+  .profile-info h3 {
+    font-size: 0.9em;
+  }
+
+  .profile-info p {
+    font-size: 0.7em;
+  }
+
+  .profile-posts {
+    grid-template-columns: 1fr;
+  }
 }

@@ -1,5 +1,8 @@
-// /*Manejo para ver el perfil del usuario ("para ver mi propio perfil")
-//  */
+/**
+ * Manejo para ver el perfil del usuario, usamos el contexto creado con la autenticación, para saber que efectivamente es la cuenta del usuario
+ * logueado. Aquí manejamos la información como el nombre de usuario, foto de perfil, descripción, la posibilidad de editar la foto de perfil,
+ * obtener los amigos del usuario y obtener los posts que ha hecho el mismo.
+ */
 import React, { useState, useEffect } from "react";
 import ProfilePublicacion from "../Components/ProfilePublicacion";
 import { useAuth } from "../auth/AuthProvider";
@@ -11,34 +14,12 @@ const MyProfile = () => {
   const { user } = useAuth();
   const [userData, setUserData] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [friend, setFriends] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [postsStatistics, setPostsStatistics] = useState(0);
   const [friendsStatistics, setFriendsStatistics] = useState(0);
   const [message, setMessage] = useState("");
-  const token = localStorage.getItem("token");
-
-  const getUserPosts = async (userData) => {
-    try {
-      const response = await fetch(`http://localhost:3001/api/posts/feed/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const postsData = await response.json();
-        //console.log(postsData);
-        if (userData) {
-          const filteredPosts = postsData.filter(
-            (post) => post.user._id === userData._id
-          );
-          setPosts(filteredPosts);
-        }
-      }
-    } catch (error) {
-      setMessage("Error en el servidor");
-    }
-  };
+  const token = localStorage.getItem("token"); //obtenemos el token del usuario, lo decodificamos con jwtDecode para poder obtener el id
 
   useEffect(() => {
     const handleProfile = async () => {
@@ -53,7 +34,11 @@ const MyProfile = () => {
         );
         if (response.ok) {
           const DataUser = await response.json();
-          setUserData(DataUser);
+          setUserData(DataUser.user);
+          setFriends(DataUser.user.friends); //guardamos los amigos del usuario
+          setPosts(DataUser.posts); //guardamos los posts del usuario
+          setPostsStatistics(DataUser.posts.length);
+          setFriendsStatistics(DataUser.user.friends.length); //estas estadísticas nos dicen cuántos posts ha hecho el usuario y cuándos amigos tiene
           setMessage("Perfil cargado");
         }
       } catch (error) {
@@ -65,13 +50,6 @@ const MyProfile = () => {
       handleProfile();
     }
   }, [user, token]);
-
-  useEffect(() => {
-    if (userData) {
-      getUserPosts(userData); // Cargar posts solo cuando userData esté listo
-    }
-  }, [userData]);
-
 
   const handleOpenModal = (post) => {
     setSelectedPost(post);
@@ -103,16 +81,17 @@ const MyProfile = () => {
 
         <div className="posts-stats">
           <h5>Posts</h5>
-          <p>5</p>
+          <p>{postsStatistics}</p>
         </div>
         <div className="friends-stats">
           <h5>Friends</h5>
-          <p>0</p>
+          <p>{friendsStatistics}</p>
         </div>
       </div>
       <div className="profile-editBtn">
         <button>EditProfile</button>
       </div>
+      {/* ProfilePublicacion es un tipo de publicación que solo está en el perfil, solo muestra las imágenes que ha subido el usuario */}
       <div className="profile-posts">
         {posts.length > 0 ? (
           posts.map((post) => (
@@ -127,6 +106,7 @@ const MyProfile = () => {
           <p>No hay publicaciones</p>
         )}
       </div>
+      {/* En este modal, al hacer click en la ProfilePublicacion, se muestra la publicacion del usuario por completo */}
       {selectedPost && (
         <Modal onClose={handleCloseModal}>
           <div className="modal-post">
