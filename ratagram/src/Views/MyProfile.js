@@ -9,6 +9,7 @@ import { useAuth } from "../auth/AuthProvider";
 import Modal from "../Components/Modal";
 import Publicacion from "../Components/Publicacion";
 import "../styles/MyProfile.css";
+import handleDeleteClick from "../Components/Publicacion";
 
 const MyProfile = () => {
   const { user } = useAuth();
@@ -116,6 +117,11 @@ const MyProfile = () => {
               photo={selectedPost.imageUrl}
               description={selectedPost.caption}
             ></Publicacion>
+          </div>
+          <div>
+            <button className="publicacion-button" onClick={handleDeleteClick}>
+              Borrar
+            </button>
           </div>
         </Modal>
       )}
