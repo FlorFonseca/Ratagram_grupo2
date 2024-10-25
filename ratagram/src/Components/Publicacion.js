@@ -3,6 +3,8 @@
 import React from "react";
 import "../styles/Publicacion.css";
 import { useNavigate } from "react-router-dom";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
 
 const deletePublicacion = async (id) => {
   const publicacionDelete = await fetch("http://localhost:3001/api/posts/${id}", {
@@ -34,10 +36,10 @@ const Publicacion = ({ username, id, refreshFeed, photo, description  }) => {
         <p className="publicacion-description">{description}</p>
         <div className="publicacion-wrapp-buttons">
           <button className="publicacion-button" onClick={handleDetailsClick}>
-            Detalle
+            <FavoriteBorderIcon/>
           </button>
           <button className="publicacion-button" onClick={handleDeleteClick}>
-            Borrar
+            <MapsUgcRoundedIcon/>
           </button>
         </div>
       </div>
