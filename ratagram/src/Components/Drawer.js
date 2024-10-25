@@ -17,11 +17,13 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
+import Dropdown from "./Dropdown"; // Importa el componente Dropdown
 
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme }) => ({
+  ({ theme, open }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
@@ -29,18 +31,13 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: `-${drawerWidth}px`,
-    variants: [
-      {
-        props: ({ open }) => open,
-        style: {
-          transition: theme.transitions.create("margin", {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
-          marginLeft: 0,
-        },
-      },
-    ],
+    ...(open && {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
   })
 );
 
@@ -56,6 +53,8 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [showDropdown, setShowDropdown] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -63,6 +62,26 @@ export default function PersistentDrawerLeft() {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleClick = (text) => {
+    switch (text) {
+      case "Inicio":
+        navigate("/myfeed");
+        break;
+      case "Mi Perfil":
+        navigate("/myprofile");
+        break;
+      case "Buscar":
+        setShowDropdown(true);
+        break;
+      case "Cerrar Sesión":
+        navigate("/");
+        localStorage.removeItem("token");
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -79,7 +98,7 @@ export default function PersistentDrawerLeft() {
             top: theme.spacing(2), // Añadir margen superior (doble)
             left: theme.spacing(2), // Añadir margen izquierdo (doble)
             zIndex: theme.zIndex.drawer + 1, // Asegura que el botón esté por encima del drawer
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down("sm")]: {
               top: theme.spacing(1), // Reducir margen superior en pantallas pequeñas
               left: theme.spacing(1), // Reducir margen izquierdo en pantallas pequeñas
             },
@@ -115,9 +134,15 @@ export default function PersistentDrawerLeft() {
         <List>
           {["Inicio", "Mi Perfil", "Buscar"].map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => handleClick(text)}>
                 <ListItemIcon>
-                  {index === 0 ? <HomeIcon /> : index === 1 ? <AccountCircleIcon /> : <SearchIcon />}
+                  {index === 0 ? (
+                    <HomeIcon />
+                  ) : index === 1 ? (
+                    <AccountCircleIcon />
+                  ) : (
+                    <SearchIcon />
+                  )}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -128,7 +153,7 @@ export default function PersistentDrawerLeft() {
         <List>
           {["Cerrar Sesión"].map((text) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => handleClick(text)}>
                 <ListItemIcon>
                   <LogoutIcon />
                 </ListItemIcon>
@@ -140,6 +165,7 @@ export default function PersistentDrawerLeft() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
+        {showDropdown && <Dropdown />} {/* Renderiza el componente Dropdown */}
       </Main>
     </Box>
   );
