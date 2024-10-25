@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Importamos useNavigate
 import "../styles/FeedStyle.css";
 import Publicacion from "../Components/Publicacion";
+import PersistentDrawerLeft from "../Components/Drawer";
 
 export default function MyFeed() {
   const navigate = useNavigate(); // navigate nos permitirá poder redireccionar la página a la ruta que sea necesaria en el momento
@@ -69,6 +70,7 @@ export default function MyFeed() {
       ) : (
         <li>No hay publicaciones disponibles.</li> // Mensaje si no hay posts
       )}
+      <PersistentDrawerLeft />
     </div>
   );
 }

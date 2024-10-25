@@ -9,6 +9,7 @@ import { useAuth } from "../auth/AuthProvider";
 import Modal from "../Components/Modal";
 import Publicacion from "../Components/Publicacion";
 import "../styles/MyProfile.css";
+import PersistentDrawerLeft from "../Components/Drawer";
 
 const MyProfile = () => {
   const { user } = useAuth();
@@ -119,6 +120,7 @@ const MyProfile = () => {
           </div>
         </Modal>
       )}
+      <PersistentDrawerLeft />
     </div>
   );
 };
