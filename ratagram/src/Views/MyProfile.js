@@ -19,6 +19,9 @@ const MyProfile = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [postsStatistics, setPostsStatistics] = useState(0);
   const [friendsStatistics, setFriendsStatistics] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
+  const [newProfilePicture, setNewProfilePicture] = useState("");
   const [message, setMessage] = useState("");
   const token = localStorage.getItem("token"); //obtenemos el token del usuario, lo decodificamos con jwtDecode para poder obtener el id
 
@@ -40,6 +43,8 @@ const MyProfile = () => {
           setPosts(DataUser.posts); //guardamos los posts del usuario
           setPostsStatistics(DataUser.posts.length);
           setFriendsStatistics(DataUser.user.friends.length); //estas estadísticas nos dicen cuántos posts ha hecho el usuario y cuándos amigos tiene
+          setNewUsername(DataUser.user.username);
+          setNewProfilePicture(DataUser.user.profileImage);//estos indican los valores iniciales de username y profileimage para despues poder editarlos
           setMessage("Perfil cargado");
         }
       } catch (error) {
@@ -60,6 +65,41 @@ const MyProfile = () => {
     setSelectedPost(null);
   };
 
+  const handleEditClick = () => {
+    setIsEditing(!isEditing); // cambia entre vista y edición
+  };
+
+  const handleEditProfile = async ()=>{
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/user/profile/edit`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            username: newUsername,
+            profilePicture: newProfilePicture,
+          }),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const updatedData = await response.json();
+        setUserData(updatedData.user);
+        setIsEditing(false); // salir del modo edición
+        setMessage("Perfil actualizado con éxito");
+      } else {
+        setMessage("Error al actualizar el perfil");
+      }
+    } catch (error) {
+      setMessage("Error en el servidor");
+    }
+  }
+  
+
   if (!user) {
     return <div>Cargando perfil...</div>;
   }
@@ -67,11 +107,30 @@ const MyProfile = () => {
   return (
     <div className="profile-container">
       <div className="bigUserName">
-        <h1>{userData?.username}</h1>
+        <h1>
+          {isEditing ? (
+            <input
+              type="text"
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
+            />
+          ) : (
+            userData?.username
+          )}
+        </h1>
       </div>
       <div className="profile-header">
         <div className="profile-pic">
-          <img src={userData?.profileImage || "img"} alt="perfil"></img>
+          {isEditing ? (
+            <input
+              type="text"
+              value={newProfilePicture}
+              onChange={(e) => setNewProfilePicture(e.target.value)}
+              placeholder="URL de la nueva imagen"
+            />
+          ) : (
+            <img src={userData?.profileImage || "img"} alt="perfil"></img>
+          )}
         </div>
         <div className="profile-info">
           <div className="littleUserName">
@@ -90,7 +149,14 @@ const MyProfile = () => {
         </div>
       </div>
       <div className="profile-editBtn">
-        <button>EditProfile</button>
+        {isEditing ? (
+          <>
+            <button onClick={handleEditProfile}>Save</button>
+            <button onClick={handleEditClick}>Cancel</button>
+          </>
+        ) : (
+          <button onClick={handleEditClick}>Edit Profile</button>
+        )}
       </div>
       {/* ProfilePublicacion es un tipo de publicación que solo está en el perfil, solo muestra las imágenes que ha subido el usuario */}
       <div className="profile-posts">
