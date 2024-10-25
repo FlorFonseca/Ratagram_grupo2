@@ -29,7 +29,7 @@ export default function MyFeed() {
 
       if (response.ok) {
         setPosts(data || []); //Acá cargamos los posts que obtenemos de la db
-        setMessage("Feed cargado exitosamente");
+        // setMessage("Feed cargado exitosamente");
       } else {
         setMessage(data.message || "Error al cargar el feed");
         // Si, por alguna razón, la respuesta indica que el usuario no está autorizado, entonces redirigimos al login. Esto funciona como un doble chequeo, ya que al feed no se debería acceder si el usuario no está logueado (logica ya explicada en Login.js)
@@ -50,7 +50,7 @@ export default function MyFeed() {
 
   return (
     <div className="feedRatagram">
-      <h1 className="titulo">Feed</h1>
+      <h1 className="titulo"></h1>
       {message && <p>{message}</p>} {/* Muestra el mensaje */}
       {posts && posts.length > 0 ? (
         posts
