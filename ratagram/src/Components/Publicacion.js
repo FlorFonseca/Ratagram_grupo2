@@ -7,13 +7,6 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
 import { useState } from "react";
 
-// const deletePublicacion = async (id) => {
-//   const publicacionDelete = await fetch(`http://localhost:3001/api/posts/${id}`, {
-//     method: "DELETE",
-//   });
-
-//   return publicacionDelete;
-// };
 
 const handleLikes = async (id) => {
   try {
@@ -67,6 +60,8 @@ const Publicacion = ({
   const navigate = useNavigate();
   const [likes, setLikes] = useState(Likes || 0);
   const [commentInput, setCommentInput] = useState("");
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState("");
 
   const handleLikeClick = async () => {
     const postData = await handleLikes(id);
@@ -82,21 +77,19 @@ const Publicacion = ({
     }
     const commentPosted = await handleComments(id, commentInput);
     if (commentPosted) {
+      setComments([...comments, commentPosted]);
       setCommentInput("");
-      refreshFeed();
     }
   };
 
-  /*const handleComments = () => {
-    navigate(`/details/${id}`);
-  };*/
-
-  /**const handleDeleteClick = async () => {
-    const response = await deletePublicacion(id);
-    if (response.ok) {
-      refreshFeed();
+  const toShowComments = async() =>{
+    if(!showComments){
+      const comments = await handleComments(id);
+      setComments(comments);
     }
-  };*/
+    setShowComments(!showComments);
+  };
+
 
   return (
     <div className="Publicacion">
@@ -124,6 +117,18 @@ const Publicacion = ({
             className="comment-input"
           />
         </div>
+        <p className="verComentarios" onClick={toShowComments}>
+          {showComments ? "Ver menos" : "Ver más"}
+        </p>
+        {showComments && (
+          <div className="publicacion-comentarios">
+            {comments.map((comment)=>(
+              <div key={comment._id} className="comment">
+                <strong>@{comment.user.username}: </strong> {comment.content}
+              </div>
+            ))}
+          </div>
+        )}
         <button
           className="publicacion-comment-button"
           onClick={handleCommentsClick}
