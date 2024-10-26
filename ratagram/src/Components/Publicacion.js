@@ -55,19 +55,19 @@ const handleComments = async (id, content) => {
   }
 };
 
-const Publicacion = ({
-  username,
-  id,
-  photo,
-  description,
-  Likes,
-  Comments,
-}) => {
-
+//Le pasamos como prop isProfileView para saber si es una foto de nuestro perfil, esto nos sirve para poder tener permiso para borrarla.
+const Publicacion = ({ id, username, photo, description, Likes, Comments, isProfileView, refreshFeed, onDelete, }) => {
   const [likes, setLikes] = useState(Likes || 0);
   const [commentInput, setCommentInput] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(Comments);
+
+  //Manejador para eliminar una publicación:
+  const handleDeleteClick = async() => {
+      if (isProfileView && onDelete) {
+        onDelete(id); //Se puede llamar a la función de eliminación si estamos en la vista del perfil.
+      }
+  };
 
   const handleLikeClick = async () => {
     const postData = await handleLikes(id);
@@ -112,6 +112,9 @@ const Publicacion = ({
             className="comment-input"
           />
         </div>
+        {isProfileView && (
+          <button onClick={handleDeleteClick}>Eliminar Publicación.</button>
+        )}
         <p className="verComentarios" onClick={toShowComments}>
           {showComments ? "Ver menos" : "Ver más"}
         </p>
@@ -119,7 +122,8 @@ const Publicacion = ({
           <div className="publicacion-comentarios">
             {comments.map((comment) => (
               <div key={comment._id} className="comment">
-                <strong>@{comment.user}: </strong> {comment.content}{/**En este caso, como no podemos acceder al username de user, dejamos el id, lo ideal sería poder acceder alnombre de usuario de quién hace el comentario */}
+                <strong>@{comment.user}: </strong> {comment.content}
+                {/**En este caso, como no podemos acceder al username de user, dejamos el id, lo ideal sería poder acceder alnombre de usuario de quién hace el comentario */}
               </div>
             ))}
           </div>
