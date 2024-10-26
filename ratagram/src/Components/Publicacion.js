@@ -2,7 +2,6 @@
  */
 import React from "react";
 import "../styles/Publicacion.css";
-import { useNavigate } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
 import { useState } from "react";
@@ -44,7 +43,7 @@ const handleComments = async (id, content) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({content}),
       }
     );
     if (!response.ok) {
@@ -59,14 +58,16 @@ const handleComments = async (id, content) => {
 const Publicacion = ({
   username,
   id,
-  refreshFeed,
   photo,
   description,
   Likes,
+  Comments,
 }) => {
-  const navigate = useNavigate();
+
   const [likes, setLikes] = useState(Likes || 0);
   const [commentInput, setCommentInput] = useState("");
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState(Comments);
 
   const handleLikeClick = async () => {
     const postData = await handleLikes(id);
@@ -82,21 +83,14 @@ const Publicacion = ({
     }
     const commentPosted = await handleComments(id, commentInput);
     if (commentPosted) {
+      setComments([...comments, commentPosted]);
       setCommentInput("");
-      refreshFeed();
     }
   };
 
-  /*const handleComments = () => {
-    navigate(`/details/${id}`);
-  };*/
-
-  /**const handleDeleteClick = async () => {
-    const response = await deletePublicacion(id);
-    if (response.ok) {
-      refreshFeed();
-    }
-  };*/
+  const toShowComments = async () => {
+    setShowComments(!showComments);
+  };
 
   return (
     <div className="Publicacion">
@@ -118,6 +112,18 @@ const Publicacion = ({
             className="comment-input"
           />
         </div>
+        <p className="verComentarios" onClick={toShowComments}>
+          {showComments ? "Ver menos" : "Ver más"}
+        </p>
+        {showComments && (
+          <div className="publicacion-comentarios">
+            {comments.map((comment) => (
+              <div key={comment._id} className="comment">
+                <strong>@{comment.user}: </strong> {comment.content}{/**En este caso, como no podemos acceder al username de user, dejamos el id, lo ideal sería poder acceder alnombre de usuario de quién hace el comentario */}
+              </div>
+            ))}
+          </div>
+        )}
         <div className="publicacion-wrapp-buttons">
           <button className="publicacion-like-button" onClick={handleLikeClick}>
             <FavoriteBorderIcon /> {likes}
