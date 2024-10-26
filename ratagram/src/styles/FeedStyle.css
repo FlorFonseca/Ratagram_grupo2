@@ -1,10 +1,105 @@
 .feedRatagram {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 0;
+  font-family: Arial, sans-serif;
 }
 
-.titulo{
-    display:flex;
-    grid-column: 2;
+.titulo {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.feedRatagram > li {
+  list-style: none;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.Publicacion {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+.publicacion-content {
+  padding: 16px;
+}
+
+.publicacion-title {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.publicacion-title img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.publicacion-photo {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.publicacion-description {
+  padding: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.publicacion-wrapp-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-top: 1px solid #ddd;
+}
+
+.publicacion-like-button,
+.publicacion-comment-button {
+  background: none;
+  border: none;
+  color: #ff5a5f;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.publicacion-like-button:hover,
+.publicacion-comment-button:hover {
+  color: #e63946;
+}
+
+.publicacion-comment-section {
+  border-top: 1px solid #ddd;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+}
+
+.comment-input::placeholder {
+  color: #aaa;
 }

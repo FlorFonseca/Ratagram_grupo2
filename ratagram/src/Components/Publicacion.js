@@ -109,12 +109,6 @@ const Publicacion = ({
           alt="photo"
         ></img>
         <p className="publicacion-description">{description}</p>
-        <div className="publicacion-wrapp-buttons">
-          <button className="publicacion-like-button" onClick={handleLikeClick}>
-            <FavoriteBorderIcon /> {likes}
-            {/*Para mostrar la cantidad de likes de la publicación*/}
-          </button>
-        </div>
         <div className="publicacion-comment-section">
           <input
             type="text"
@@ -124,12 +118,18 @@ const Publicacion = ({
             className="comment-input"
           />
         </div>
-        <button
-          className="publicacion-comment-button"
-          onClick={handleCommentsClick}
-        >
-          <MapsUgcRoundedIcon />
-        </button>
+        <div className="publicacion-wrapp-buttons">
+          <button className="publicacion-like-button" onClick={handleLikeClick}>
+            <FavoriteBorderIcon /> {likes}
+            {/*Para mostrar la cantidad de likes de la publicación*/}
+          </button>
+          <button
+            className="publicacion-comment-button"
+            onClick={handleCommentsClick}
+          >
+            <MapsUgcRoundedIcon />
+          </button>
+        </div>
       </div>
     </div>
   );
