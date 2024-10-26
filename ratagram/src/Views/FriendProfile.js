@@ -93,28 +93,41 @@ const FriendProfile = () => {
   }
 
   return (
-    <div className="friend-profile-container">
-      <div className="friend-profile-header">
-        <img src={friendData.profileImage || "img"} alt="perfil" />
+    <div className="profile-container">
+      <div className="bigUserName">
         <h1>{friendData.username}</h1>
-        <p>{friendData.createdAt}</p>
+      </div>
+  
+      <div className="profile-header">
+        <div className="profile-pic">
+          <img src={friendData.profileImage || "img"} alt="perfil" />
+        </div>
+  
+        <div className="profile-info">
+          <div className="littleUserName">
+            <h3>{friendData.username}</h3>
+            <p>{friendData.createdAt}</p>
+          </div>
+        </div>
+  
+        <div className="posts-stats">
+          <h5>Posts</h5>
+          <p>{posts.length}</p>
+        </div>
+  
+        <div className="friends-stats">
+          <h5>Friends</h5>
+          <p>{friendData.friends?.length}</p>
+        </div>
+      </div>
+  
+      <div className="profile-editBtn">
         <button onClick={handleFriendAction}>
           {isFriend ? "Eliminar amigo" : "Añadir amigo"}
         </button>
       </div>
-
-      <div className="friend-profile-stats">
-        <div>
-          <h5>Posts</h5>
-          <p>{posts.length}</p>
-        </div>
-        <div>
-          <h5>Amigos</h5>
-          <p>{friendData.friends?.length}</p>
-        </div>
-      </div>
-
-      <div className="friend-profile-posts">
+  
+      <div className="profile-posts">
         {posts.length > 0 ? (
           posts.map((post) => (
             <ProfilePublicacion
@@ -128,21 +141,22 @@ const FriendProfile = () => {
           <p>No hay publicaciones</p>
         )}
       </div>
-
+  
       {selectedPost && (
         <Modal onClose={handleCloseModal}>
-          <Publicacion
-            username={friendData.username}
-            id={selectedPost.id}
-            photo={selectedPost.imageUrl}
-            description={selectedPost.caption}
-          />
+          <div className="modal-post">
+            <Publicacion
+              username={friendData.username}
+              id={selectedPost.id}
+              photo={selectedPost.imageUrl}
+              description={selectedPost.caption}
+            />
+          </div>
         </Modal>
       )}
-
+  
       <p>{message}</p>
     </div>
   );
-};
-
+}  
 export default FriendProfile;
