@@ -9,6 +9,7 @@ import "../styles/FeedStyle.css";
 import Publicacion from "../Components/Publicacion";
 import PersistentDrawerLeft from "../Components/Drawer";
 
+
 export default function MyFeed() {
   const navigate = useNavigate(); // navigate nos permitirá poder redireccionar la página a la ruta que sea necesaria en el momento
   const [posts, setPosts] = useState([]); // este useState permite almacenar los diferentes uploads (posts) que hacen los usuarios
@@ -58,11 +59,13 @@ export default function MyFeed() {
           .map((post) => (
             <Publicacion
               key={post.createdAt}
+              id={post._id}
               username={post.user.username}
-              id={post.user._id}
               refreshFeed={handleFeed}
               photo={post.imageUrl}
               description={post.caption}
+              Likes={post.likes ? post.likes.length : 0}
+              Comments={post.comments}
             /> // Utilizamos el componente Publicacion para mostrar los posts
             //Decidimos utilizar como key el campo de createdAt ya que nos pareció el que cumple con la condición de ser unico.
             //Como aún no tenemos la funcionalidad de cargar la imagen a mongo y poder extraerla completamente, decidimos, por el momento, mostrar la url de la imágen en el feed
