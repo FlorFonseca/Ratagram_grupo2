@@ -65,7 +65,7 @@ export default function MyFeed() {
               photo={post.imageUrl}
               description={post.caption}
               Likes={post.likes ? post.likes.length : 0}
-              Comments={post.comments? post.comments : []}
+              Comments={post.comments}
             /> // Utilizamos el componente Publicacion para mostrar los posts
             //Decidimos utilizar como key el campo de createdAt ya que nos pareció el que cumple con la condición de ser unico.
             //Como aún no tenemos la funcionalidad de cargar la imagen a mongo y poder extraerla completamente, decidimos, por el momento, mostrar la url de la imágen en el feed

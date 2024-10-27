@@ -19,6 +19,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown"; // Importa el componente Dropdown
+import { useAuth } from "../auth/AuthProvider";
 
 const drawerWidth = 240;
 
@@ -52,6 +53,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
+  const { user, logout } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const navigate = useNavigate();
@@ -76,8 +78,8 @@ export default function PersistentDrawerLeft() {
         setShowDropdown(true);
         break;
       case "Cerrar Sesión":
+        logout(); //logout es una función de AuthProvider, usamos el contexto para obtener los datos del usuario y eliminar el token
         navigate("/");
-        localStorage.removeItem("token");
         break;
       default:
         break;

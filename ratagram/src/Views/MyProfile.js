@@ -36,6 +36,7 @@ const MyProfile = () => {
             },
           }
         );
+
         if (response.ok) {
           const DataUser = await response.json();
           setUserData(DataUser.user);
@@ -44,7 +45,7 @@ const MyProfile = () => {
           setPostsStatistics(DataUser.posts.length);
           setFriendsStatistics(DataUser.user.friends.length); //estas estadísticas nos dicen cuántos posts ha hecho el usuario y cuándos amigos tiene
           setNewUsername(DataUser.user.username);
-          setNewProfilePicture(DataUser.user.profileImage);//estos indican los valores iniciales de username y profileimage para despues poder editarlos
+          setNewProfilePicture(DataUser.user.profileImage); //estos indican los valores iniciales de username y profileimage para despues poder editarlos
           setMessage("Perfil cargado");
         }
       } catch (error) {
@@ -56,6 +57,10 @@ const MyProfile = () => {
       handleProfile();
     }
   }, [user, token]);
+
+  if (!user) {
+    return <div>Cargando perfil...</div>;
+  }
 
   const handleOpenModal = (post) => {
     setSelectedPost(post);
@@ -69,7 +74,7 @@ const MyProfile = () => {
     setIsEditing(!isEditing); // cambia entre vista y edición
   };
 
-  const handleEditProfile = async ()=>{
+  const handleEditProfile = async () => {
     try {
       const response = await fetch(
         `http://localhost:3001/api/user/profile/edit`,
@@ -97,12 +102,7 @@ const MyProfile = () => {
     } catch (error) {
       setMessage("Error en el servidor");
     }
-  }
-  
-
-  if (!user) {
-    return <div>Cargando perfil...</div>;
-  }
+  };
 
   return (
     <div className="profile-container">
@@ -163,7 +163,7 @@ const MyProfile = () => {
         {posts.length > 0 ? (
           posts.map((post) => (
             <ProfilePublicacion
-              key={post.id}
+              key={post._id}
               id={post.id}
               photo={post.imageUrl}
               onClick={() => handleOpenModal(post)}
@@ -182,6 +182,8 @@ const MyProfile = () => {
               id={selectedPost.id}
               photo={selectedPost.imageUrl}
               description={selectedPost.caption}
+              Likes={selectedPost.likes.length}
+              Comments={selectedPost.comments}
             ></Publicacion>
           </div>
         </Modal>

@@ -121,8 +121,12 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
         {showComments && (
           <div className="publicacion-comentarios">
             {comments.map((comment) => (
-              <div key={comment._id} className="comment">
-                <strong>@{comment.user}: </strong> {comment.content}
+
+              <div key={comment.id} className="comment">
+                <p>
+                  @{comment.user}: {comment.content}
+                </p>
+
                 {/**En este caso, como no podemos acceder al username de user, dejamos el id, lo ideal sería poder acceder alnombre de usuario de quién hace el comentario */}
               </div>
             ))}
