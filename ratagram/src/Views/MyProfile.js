@@ -13,7 +13,9 @@ import PersistentDrawerLeft from "../Components/Drawer";
 
 const MyProfile = () => {
   const { user } = useAuth();
+  console.log("user", user);
   const [userData, setUserData] = useState(null);
+  console.log("usesrData", userData);
   const [posts, setPosts] = useState([]);
   const [friend, setFriends] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -53,9 +55,7 @@ const MyProfile = () => {
       }
     };
 
-    if (user) {
-      handleProfile();
-    }
+    handleProfile();
   }, [user, token]);
 
   if (!user) {
