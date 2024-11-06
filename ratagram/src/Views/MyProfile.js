@@ -24,6 +24,7 @@ const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [newUsername, setNewUsername] = useState("");
   const [newProfilePicture, setNewProfilePicture] = useState("");
+  const [newDescription, setNewDescription] = useState("");
   const [message, setMessage] = useState("");
   const token = localStorage.getItem("token"); //obtenemos el token del usuario, lo decodificamos con jwtDecode para poder obtener el id
 
@@ -48,6 +49,7 @@ const MyProfile = () => {
           setFriendsStatistics(DataUser.user.friends.length); //estas estadísticas nos dicen cuántos posts ha hecho el usuario y cuándos amigos tiene
           setNewUsername(DataUser.user.username);
           setNewProfilePicture(DataUser.user.profileImage); //estos indican los valores iniciales de username y profileimage para despues poder editarlos
+          setNewDescription(DataUser.user.description);
           setMessage("Perfil cargado");
         }
       } catch (error) {
@@ -83,6 +85,7 @@ const MyProfile = () => {
           body: JSON.stringify({
             username: newUsername,
             profilePicture: newProfilePicture,
+            description: newDescription,
           }),
           headers: {
             Authorization: `Bearer ${token}`,
@@ -128,31 +131,68 @@ const MyProfile = () => {
               onChange={(e) => setNewProfilePicture(e.target.value)}
               placeholder="URL de la nueva imagen"
             />
+          ) : userData?.profileImage ? (
+            <img
+              src={userData?.profileImage || "img"}
+              alt="perfil"
+              className="profile-pic-img"
+            ></img>
           ) : (
-            <img src={userData?.profileImage || "img"} alt="perfil"></img>
+            <svg
+              className="default-profile-pic"
+              width="100"
+              height="100"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="100" height="100" fill="#007bff" />
+              <text
+                x="50%"
+                y="50%"
+                dy=".35em"
+                textAnchor="middle"
+                fontSize="40"
+                fill="white"
+                fontFamily="Arial"
+              >
+                {userData?.username?.substring(0, 2).toUpperCase()}
+              </text>
+            </svg>
           )}
         </div>
+
         <div className="profile-info">
           <div className="littleUserName">
             <h3>{userData?.username}</h3>
-            <p>{userData?.createdAt}</p>
+          </div>
+          <div className="description">
+            {isEditing ? (
+              <input
+                type="text"
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+                placeholder="Descripción"
+              />
+            ) : (
+              <p>{userData?.description}</p>
+            )}
           </div>
         </div>
-
-        <div className="posts-stats">
-          <h5>Posts</h5>
-          <p>{postsStatistics}</p>
-        </div>
-        <div className="friends-stats">
-          <h5>Friends</h5>
-          <p>{friendsStatistics}</p>
+        <div className="profile-stats">
+          <div>
+            <h5>Posts</h5>
+            <p>{postsStatistics}</p>
+          </div>
+          <div>
+            <h5>Friends</h5>
+            <p>{friendsStatistics}</p>
+          </div>
         </div>
       </div>
       <div className="profile-editBtn">
         {isEditing ? (
           <>
-            <button onClick={handleEditProfile}>Save</button>
-            <button onClick={handleEditClick}>Cancel</button>
+            <button className="editingBtn" onClick={handleEditProfile}>Save</button>
+            <button className="editingBtn" onClick={handleEditClick}>Cancel</button>
           </>
         ) : (
           <button onClick={handleEditClick}>Edit Profile</button>
@@ -163,7 +203,7 @@ const MyProfile = () => {
         {posts.length > 0 ? (
           posts.map((post) => (
             <ProfilePublicacion
-              key={post._id}
+              key={post.id}
               id={post.id}
               photo={post.imageUrl}
               onClick={() => handleOpenModal(post)}
