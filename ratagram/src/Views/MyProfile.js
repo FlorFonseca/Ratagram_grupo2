@@ -191,8 +191,8 @@ const MyProfile = () => {
       <div className="profile-editBtn">
         {isEditing ? (
           <>
-            <button onClick={handleEditProfile}>Save</button>
-            <button onClick={handleEditClick}>Cancel</button>
+            <button className="editingBtn" onClick={handleEditProfile}>Save</button>
+            <button className="editingBtn" onClick={handleEditClick}>Cancel</button>
           </>
         ) : (
           <button onClick={handleEditClick}>Edit Profile</button>
