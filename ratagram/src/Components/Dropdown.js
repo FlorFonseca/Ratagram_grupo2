@@ -1,9 +1,15 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+const token = localStorage.getItem("token");
 
 const getUsers = async () => {
-  const usersFetch = await fetch("http://localhost:3001/api/all");
+  const usersFetch = await fetch("http://localhost:3001/api/user/all", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const users = await usersFetch.json();
+  console.log(users);
   return users;
 };
 
@@ -22,11 +28,11 @@ const Dropdown = () => {
   }, []);
 
   React.useEffect(() => {
-    setFilteredUsers(
-      users.filter((user) =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    const filtered = users.filter((user) =>
+      user.username.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    setFilteredUsers(filtered);
+    console.log("filteredUsers", filtered);
   }, [searchTerm, users]);
 
   const handleInputChange = (event) => {
@@ -48,7 +54,7 @@ const Dropdown = () => {
       <ul>
         {filteredUsers.map((user) => (
           <li key={user.id} onClick={() => handleUserClick(user.id)}>
-            {user.name}
+            {user.username}
           </li>
         ))}
       </ul>

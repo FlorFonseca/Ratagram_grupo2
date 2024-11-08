@@ -17,9 +17,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown"; // Importa el componente Dropdown
-import { useAuth } from "../auth/AuthProvider";
 
 const drawerWidth = 240;
 
@@ -46,17 +44,14 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
 
-export default function PersistentDrawerLeft() {
+const PersistentDrawerLeft = () => {
   const theme = useTheme();
-  const { user, logout } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [showDropdown, setShowDropdown] = React.useState(false);
-  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -67,22 +62,10 @@ export default function PersistentDrawerLeft() {
   };
 
   const handleClick = (text) => {
-    switch (text) {
-      case "Inicio":
-        navigate("/myfeed");
-        break;
-      case "Mi Perfil":
-        navigate("/myprofile");
-        break;
-      case "Buscar":
-        setShowDropdown(true);
-        break;
-      case "Cerrar Sesión":
-        logout(); //logout es una función de AuthProvider, usamos el contexto para obtener los datos del usuario y eliminar el token
-        navigate("/");
-        break;
-      default:
-        break;
+    if (text === "Buscar") {
+      setShowDropdown(true);
+    } else {
+      setShowDropdown(false);
     }
   };
 
@@ -171,4 +154,6 @@ export default function PersistentDrawerLeft() {
       </Main>
     </Box>
   );
-}
+};
+
+export default PersistentDrawerLeft;
