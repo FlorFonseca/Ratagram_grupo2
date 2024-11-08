@@ -172,3 +172,5 @@ export default function PersistentDrawerLeft() {
     </Box>
   );
 }
+
+//parece que quedo arreglado el drawer
