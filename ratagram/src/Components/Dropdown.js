@@ -55,7 +55,7 @@ const Dropdown = () => {
       <ul>
         {filteredUsers.map((user) => (
           <li key={user.id} onClick={() => handleUserClick(user.id)}>
-            {user.name}
+            {user.username}
           </li>
         ))}
       </ul>
