@@ -41,7 +41,7 @@ const Dropdown = () => {
   };
 
   const handleUserClick = (userId) => {
-    navigate(`/user/${userId}`);
+    navigate(`/user/profile/${userId}`);
   };
 
   return (
