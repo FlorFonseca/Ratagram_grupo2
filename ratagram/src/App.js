@@ -1,7 +1,7 @@
-import './styles/App.css';
+import "./styles/App.css";
 //import LoginComponent from './routes/Login.js';
 // import SignUp from './routes/Signup';
-import Home from './routes/Home';
+import Home from "./routes/Home";
 
 function App() {
   return (
@@ -9,12 +9,10 @@ function App() {
       <header className="App-header">
         {/* <LoginComponent/> */}
         {/* <SignUp/> */}
-        <Home/>
+        <Home />
       </header>
     </div>
   );
 }
 
 export default App;
-
-//.
