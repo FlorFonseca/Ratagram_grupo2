@@ -41,7 +41,7 @@ const Dropdown = () => {
   };
 
   const handleUserClick = (userId) => {
-    navigate(`/user/profile/${userId}`);
+    navigate(`/friendprofile/${userId}`);
   };
 
   return (
@@ -54,7 +54,7 @@ const Dropdown = () => {
       />
       <ul>
         {filteredUsers.map((user) => (
-          <li key={user.id} onClick={() => handleUserClick(user.id)}>
+          <li key={user.id} onClick={() => handleUserClick(user._id)}>
             {user.username}
           </li>
         ))}
