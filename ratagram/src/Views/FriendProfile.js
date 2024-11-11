@@ -7,9 +7,10 @@ import { useAuth } from "../auth/AuthProvider";
 import Modal from "../Components/Modal";
 import Publicacion from "../Components/Publicacion";
 import "../styles/MyProfile.css";
+import PersistentDrawerLeft from "../Components/Drawer";
 
 const FriendProfile = () => {
-  const { friendId } = useParams();//Obtenemos el id por URL.
+  const { friendId } = useParams(); //Obtenemos el id por URL.
   const { user } = useAuth();
   const [friendData, setFriendData] = useState(null); //Se guarda la información del perfil del amigo.
   const [posts, setPosts] = useState([]); //Se guardan las fotos.
@@ -97,36 +98,36 @@ const FriendProfile = () => {
       <div className="bigUserName">
         <h1>{friendData.username}</h1>
       </div>
-  
+
       <div className="profile-header">
         <div className="profile-pic">
           <img src={friendData.profileImage || "img"} alt="perfil" />
         </div>
-  
+
         <div className="profile-info">
           <div className="littleUserName">
             <h3>{friendData.username}</h3>
             <p>{friendData.createdAt}</p>
           </div>
         </div>
-  
+
         <div className="posts-stats">
           <h5>Posts</h5>
           <p>{posts.length}</p>
         </div>
-  
+
         <div className="friends-stats">
           <h5>Friends</h5>
           <p>{friendData.friends?.length}</p>
         </div>
       </div>
-  
+
       <div className="profile-editBtn">
         <button onClick={handleFriendAction}>
           {isFriend ? "Eliminar amigo" : "Añadir amigo"}
         </button>
       </div>
-  
+
       <div className="profile-posts">
         {posts.length > 0 ? (
           posts.map((post) => (
@@ -141,7 +142,7 @@ const FriendProfile = () => {
           <p>No hay publicaciones</p>
         )}
       </div>
-  
+
       {selectedPost && (
         <Modal onClose={handleCloseModal}>
           <div className="modal-post">
@@ -154,9 +155,10 @@ const FriendProfile = () => {
           </div>
         </Modal>
       )}
-  
+
       <p>{message}</p>
+      <PersistentDrawerLeft />
     </div>
   );
-}  
+};
 export default FriendProfile;
