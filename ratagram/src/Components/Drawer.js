@@ -164,11 +164,12 @@ export default function PersistentDrawerLeft() {
             </ListItem>
           ))}
         </List>
+        <Main open={open}>
+          <DrawerHeader />
+          {showDropdown && <Dropdown />}{" "}
+          {/* Renderiza el componente Dropdown */}
+        </Main>
       </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        {showDropdown && <Dropdown />} {/* Renderiza el componente Dropdown */}
-      </Main>
     </Box>
   );
 }
