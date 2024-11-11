@@ -66,7 +66,6 @@ const Publicacion = ({
   description,
   Likes,
   Comments,
-  isProfileView,
   refreshFeed,
   onDelete,
 }) => {
@@ -76,6 +75,8 @@ const Publicacion = ({
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(Comments);
   const navigate = useNavigate();
+
+  const isProfileView = user && userId === user.id;
 
   //Manejador para eliminar una publicación:
   const handleDeleteClick = async () => {
@@ -92,7 +93,7 @@ const Publicacion = ({
   };
 
   const profileRedirect = () => {
-    if (user && userId === user.id) {
+    if (isProfileView) {
       navigate(`/myProfile`);
     } else {
       navigate(`/friendprofile/${userId}`);
@@ -138,7 +139,12 @@ const Publicacion = ({
           />
         </div>
         {isProfileView && (
-          <button onClick={handleDeleteClick}>Eliminar Publicación.</button>
+          <button
+            className="publicacion-delete-button"
+            onClick={handleDeleteClick}
+          >
+            Eliminar Publicación.
+          </button>
         )}
         <p className="verComentarios" onClick={toShowComments}>
           {showComments ? "Ver menos" : "Ver más"}

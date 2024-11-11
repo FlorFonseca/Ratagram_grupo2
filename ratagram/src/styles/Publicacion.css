@@ -94,3 +94,14 @@
   display: inline-block;
   transition: background-color 0.3s, color 0.3s;
 }
+
+/* Publicacion.css */
+.publicacion-delete-button {
+  border: 1px solid black;
+  color: #ff4d4d;
+  cursor: pointer;
+  padding: 1px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+}
