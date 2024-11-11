@@ -8,12 +8,13 @@ import { useNavigate } from "react-router-dom"; // Importamos useNavigate
 import "../styles/FeedStyle.css";
 import Publicacion from "../Components/Publicacion";
 import PersistentDrawerLeft from "../Components/Drawer";
-
+import { useAuth } from "../auth/AuthProvider";
 
 export default function MyFeed() {
   const navigate = useNavigate(); // navigate nos permitirá poder redireccionar la página a la ruta que sea necesaria en el momento
   const [posts, setPosts] = useState([]); // este useState permite almacenar los diferentes uploads (posts) que hacen los usuarios
   const [message, setMessage] = useState(""); // creamos un mensaje ya sea para indicar un cargado del feed exitoso o algún error. Esto nos sirve para verificar la respuesta del backend
+  const { user: currentUser } = useAuth();
 
   // Función para obtener los posts del feed
   const handleFeed = async () => {
@@ -61,6 +62,7 @@ export default function MyFeed() {
               key={post.createdAt}
               id={post._id}
               username={post.user.username}
+              userId={post.user._id}
               refreshFeed={handleFeed}
               photo={post.imageUrl}
               description={post.caption}

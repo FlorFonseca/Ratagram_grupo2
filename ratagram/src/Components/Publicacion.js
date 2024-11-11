@@ -5,6 +5,8 @@ import "../styles/Publicacion.css";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthProvider";
 
 // const deletePublicacion = async (id) => {
 //   const publicacionDelete = await fetch(`http://localhost:3001/api/posts/${id}`, {
@@ -43,7 +45,7 @@ const handleComments = async (id, content) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({content}),
+        body: JSON.stringify({ content }),
       }
     );
     if (!response.ok) {
@@ -56,23 +58,44 @@ const handleComments = async (id, content) => {
 };
 
 //Le pasamos como prop isProfileView para saber si es una foto de nuestro perfil, esto nos sirve para poder tener permiso para borrarla.
-const Publicacion = ({ id, username, photo, description, Likes, Comments, isProfileView, refreshFeed, onDelete, }) => {
+const Publicacion = ({
+  id,
+  username,
+  userId,
+  photo,
+  description,
+  Likes,
+  Comments,
+  isProfileView,
+  refreshFeed,
+  onDelete,
+}) => {
+  const { user } = useAuth();
   const [likes, setLikes] = useState(Likes || 0);
   const [commentInput, setCommentInput] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(Comments);
+  const navigate = useNavigate();
 
   //Manejador para eliminar una publicación:
-  const handleDeleteClick = async() => {
-      if (isProfileView && onDelete) {
-        onDelete(id); //Se puede llamar a la función de eliminación si estamos en la vista del perfil.
-      }
+  const handleDeleteClick = async () => {
+    if (isProfileView && onDelete) {
+      onDelete(id); //Se puede llamar a la función de eliminación si estamos en la vista del perfil.
+    }
   };
 
   const handleLikeClick = async () => {
     const postData = await handleLikes(id);
     if (postData && postData.likes) {
       setLikes(postData.likes.length);
+    }
+  };
+
+  const profileRedirect = () => {
+    if (user && userId === user.id) {
+      navigate(`/myProfile`);
+    } else {
+      navigate(`/friendprofile/${userId}`);
     }
   };
 
@@ -95,7 +118,9 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
   return (
     <div className="Publicacion">
       <div className="publicacion-content">
-        <h2 className="publicacion-title">{username}</h2>
+        <button className="publicacion-like-button" onClick={profileRedirect}>
+          {username}
+        </button>
         <img
           className="publicacion-photo"
           src={photo}
@@ -121,7 +146,6 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
         {showComments && (
           <div className="publicacion-comentarios">
             {comments.map((comment) => (
-
               <div key={comment.id} className="comment">
                 <p>
                   @{comment.user}: {comment.content}
