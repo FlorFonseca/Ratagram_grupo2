@@ -121,13 +121,10 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
         {showComments && (
           <div className="publicacion-comentarios">
             {comments.map((comment) => (
-
-              <div key={comment.id} className="comment">
+              <div key={comment._id} className="comment">
                 <p>
-                  @{comment.user}: {comment.content}
+                  @{comment.user && comment.user.username ? comment.user.username : "Usuario desconocido"}: {comment.content}
                 </p>
-
-                {/**En este caso, como no podemos acceder al username de user, dejamos el id, lo ideal sería poder acceder alnombre de usuario de quién hace el comentario */}
               </div>
             ))}
           </div>
@@ -135,7 +132,6 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
         <div className="publicacion-wrapp-buttons">
           <button className="publicacion-like-button" onClick={handleLikeClick}>
             <FavoriteBorderIcon /> {likes}
-            {/*Para mostrar la cantidad de likes de la publicación*/}
           </button>
           <button
             className="publicacion-comment-button"
@@ -147,5 +143,5 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
       </div>
     </div>
   );
-};
+}  
 export default Publicacion;
