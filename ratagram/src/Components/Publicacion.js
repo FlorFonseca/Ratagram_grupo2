@@ -60,10 +60,12 @@ const handleComments = async (id, content) => {
 const Publicacion = ({
   id,
   username,
+  userId,
   photo,
   description,
   Likes,
   Comments,
+  isProfileView,
   refreshFeed,
   onDelete,
 }) => {
@@ -72,18 +74,6 @@ const Publicacion = ({
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(Comments);
   const navigate = useNavigate();
-  const [user, setUser] = useState(null); // Estado para almacenar la información del usuario actual
-
-  const isProfileView = user.username === username;
-
-  //Manejador para ir al perfil:
-  const handleNavPerfil = () => {
-    if (isProfileView) {
-      navigate("/myprofile");
-    } else {
-      navigate(`/friendprofile/${friendId}`);
-    }
-  };
 
   //Manejador para eliminar una publicación:
   const handleDeleteClick = async () => {
@@ -96,6 +86,14 @@ const Publicacion = ({
     const postData = await handleLikes(id);
     if (postData && postData.likes) {
       setLikes(postData.likes.length);
+    }
+  };
+
+  const profileRedirect = () => {
+    if (userId === currentUser.id) {
+      navigate(`/myProfile`);
+    } else {
+      navigate(`/friendprofile/${userId}`);
     }
   };
 
@@ -118,7 +116,7 @@ const Publicacion = ({
   return (
     <div className="Publicacion">
       <div className="publicacion-content">
-        <button className="publicacion-like-button" onClick={handleNavPerfil}>
+        <button className="publicacion-like-button" onClick={value}>
           {username}
         </button>
         <img
