@@ -6,6 +6,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthProvider";
 
 // const deletePublicacion = async (id) => {
 //   const publicacionDelete = await fetch(`http://localhost:3001/api/posts/${id}`, {
@@ -69,6 +70,7 @@ const Publicacion = ({
   refreshFeed,
   onDelete,
 }) => {
+  const { user } = useAuth();
   const [likes, setLikes] = useState(Likes || 0);
   const [commentInput, setCommentInput] = useState("");
   const [showComments, setShowComments] = useState(false);
@@ -90,7 +92,7 @@ const Publicacion = ({
   };
 
   const profileRedirect = () => {
-    if (userId === currentUser.id) {
+    if (user && userId === user.id) {
       navigate(`/myProfile`);
     } else {
       navigate(`/friendprofile/${userId}`);
@@ -116,7 +118,7 @@ const Publicacion = ({
   return (
     <div className="Publicacion">
       <div className="publicacion-content">
-        <button className="publicacion-like-button" onClick={value}>
+        <button className="publicacion-like-button" onClick={profileRedirect}>
           {username}
         </button>
         <img
