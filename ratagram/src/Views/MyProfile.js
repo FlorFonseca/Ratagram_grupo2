@@ -29,6 +29,7 @@ const MyProfile = () => {
   const token = localStorage.getItem("token"); //obtenemos el token del usuario, lo decodificamos con jwtDecode para poder obtener el id
 
   useEffect(() => {
+    if (!user.id) return;
     const handleProfile = async () => {
       try {
         const response = await fetch(
@@ -191,8 +192,12 @@ const MyProfile = () => {
       <div className="profile-editBtn">
         {isEditing ? (
           <>
-            <button className="editingBtn" onClick={handleEditProfile}>Save</button>
-            <button className="editingBtn" onClick={handleEditClick}>Cancel</button>
+            <button className="editingBtn" onClick={handleEditProfile}>
+              Save
+            </button>
+            <button className="editingBtn" onClick={handleEditClick}>
+              Cancel
+            </button>
           </>
         ) : (
           <button onClick={handleEditClick}>Edit Profile</button>

@@ -11,7 +11,6 @@ import PersistentDrawerLeft from "../Components/Drawer";
 
 const FriendProfile = () => {
   const { friendId } = useParams(); //Obtenemos el id por URL.
-  const { user } = useAuth();
   const [friendData, setFriendData] = useState(null); //Se guarda la información del perfil del amigo.
   const [posts, setPosts] = useState([]); //Se guardan las fotos.
   const [isFriend, setIsFriend] = useState(false); //Es amigo ya?

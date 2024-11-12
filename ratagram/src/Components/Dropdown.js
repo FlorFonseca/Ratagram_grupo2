@@ -1,9 +1,8 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
-const token = localStorage.getItem("token");
-
 const getUsers = async () => {
+  const token = localStorage.getItem("token");
   const usersFetch = await fetch("http://localhost:3001/api/user/all", {
     headers: {
       Authorization: `Bearer ${token}`,
