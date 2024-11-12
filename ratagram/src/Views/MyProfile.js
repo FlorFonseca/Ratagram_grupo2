@@ -22,6 +22,7 @@ const MyProfile = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    if (!user.id) return;
     const handleProfile = async () => {
       try {
         const response = await fetch(`http://localhost:3001/api/user/profile/${user.id}`, {

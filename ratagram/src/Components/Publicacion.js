@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../styles/Publicacion.css";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthProvider";
+
 
 // Función para cargar detalles de comentarios a partir de un arreglo de IDs
 const fetchCommentsDetails = async (commentIds, token) => {
@@ -20,6 +24,7 @@ const fetchCommentsDetails = async (commentIds, token) => {
     })
   );
 };
+
 
 const Publicacion = ({ id, username, photo, description, Likes, Comments, isProfileView, onDelete }) => {
   const [likes, setLikes] = useState(Likes || 0);
@@ -44,6 +49,15 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
     loadComments();
   }, [Comments, token]);
 
+
+  //Manejador para eliminar una publicación:
+  const handleDeleteClick = async () => {
+    if (isProfileView && onDelete) {
+      onDelete(id); //Se puede llamar a la función de eliminación si estamos en la vista del perfil.
+    }
+  };
+
+
   const handleLikeClick = async () => {
     try {
       const response = await fetch(`http://localhost:3001/api/posts/${id}/like`, {
@@ -63,6 +77,7 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
       console.error("Error en handleLikes:", error);
     }
   };
+
 
   const handleCommentSubmit = async () => {
     if (commentInput.trim() === "") return;
@@ -102,14 +117,34 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
       }
     } catch (error) {
       console.error("Error en handleCommentSubmit:", error);
-    }
+      }
   }; 
+
+  
+  const profileRedirect = () => {
+    if (user && userId === user.id) {
+      navigate(`/myProfile`);
+    } else {
+      navigate(`/friendprofile/${userId}`);
+    }
+  };
+
+
   
   return (
     <div className="Publicacion">
       <div className="publicacion-content">
-        <h2 className="publicacion-title">{username}</h2>
-        <img className="publicacion-photo" src={photo} style={{ width: 250 }} alt="photo" />
+
+        <button className="publicacion-like-button" onClick={profileRedirect}>
+          {username}
+        </button>
+        <img
+          className="publicacion-photo"
+          src={photo}
+          style={{ width: 250 }}
+          alt="photo"
+        ></img>
+
         <p className="publicacion-description">{description}</p>
 
         <input
@@ -132,6 +167,7 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
           <div className="publicacion-comentarios">
             {comments.map((comment) => (
               <div key={comment._id} className="comment">
+
                 <p>
                   @{comment.user && comment.user.username ? comment.user.username : "Usuario desconocido"}: {comment.content}
                 </p>
