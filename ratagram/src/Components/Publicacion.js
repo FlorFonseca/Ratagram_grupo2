@@ -66,22 +66,45 @@ const Publicacion = ({ id, username, photo, description, Likes, Comments, isProf
 
   const handleCommentSubmit = async () => {
     if (commentInput.trim() === "") return;
-    const newComment = await fetch(`http://localhost:3001/api/posts/${id}/comments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ content: commentInput }),
-    });
-
-    if (newComment.ok) {
-      const commentData = await newComment.json();
-      setComments((prevComments) => [...prevComments, commentData]);
-      setCommentInput("");
+  
+    try {
+      const response = await fetch(`http://localhost:3001/api/posts/${id}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content: commentInput }),
+      });
+  
+      if (response.ok) {
+        const commentData = await response.json();
+  
+        // Fetch para obtener los detalles completos del comentario, incluyendo el usuario
+        const fullCommentResponse = await fetch(
+          `http://localhost:3001/api/posts/comments/${commentData._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        if (fullCommentResponse.ok) {
+          const fullCommentData = await fullCommentResponse.json();
+          setComments((prevComments) => [...prevComments, fullCommentData]);
+          setCommentInput("");
+        } else {
+          console.error("Error al obtener los detalles del comentario");
+        }
+      } else {
+        console.error("Error al crear el comentario");
+      }
+    } catch (error) {
+      console.error("Error en handleCommentSubmit:", error);
     }
-  };
-
+  }; 
+  
   return (
     <div className="Publicacion">
       <div className="publicacion-content">
