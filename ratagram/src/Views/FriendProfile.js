@@ -1,5 +1,3 @@
-/*Manejo para ver el perfil de otro usuario. Aquí manejamos la información como el nombre de usuario, foto de perfil, descripción,
- la posibilidad de añadir amigo.*/
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ProfilePublicacion from "../Components/ProfilePublicacion";
@@ -9,16 +7,33 @@ import Publicacion from "../Components/Publicacion";
 import "../styles/MyProfile.css";
 import PersistentDrawerLeft from "../Components/Drawer";
 
+// Función para cargar detalles de comentarios
+const fetchCommentsDetails = async (commentIds, token) => {
+  return await Promise.all(
+    (commentIds || []).map(async (commentId) => {
+      if (!commentId) return null;
+      const response = await fetch(`http://localhost:3001/api/posts/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        return await response.json();
+      }
+      return { _id: commentId, user: { username: "Usuario desconocido" }, content: "Comentario no disponible" };
+    })
+  );
+};
+
 const FriendProfile = () => {
-  const { friendId } = useParams(); //Obtenemos el id por URL.
-  const [friendData, setFriendData] = useState(null); //Se guarda la información del perfil del amigo.
-  const [posts, setPosts] = useState([]); //Se guardan las fotos.
-  const [isFriend, setIsFriend] = useState(false); //Es amigo ya?
+  const { friendId } = useParams();
+  const [friendData, setFriendData] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [isFriend, setIsFriend] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [message, setMessage] = useState(""); //Mensaje para ver si cargó el perfil
+  const [comments, setComments] = useState([]);
   const token = localStorage.getItem("token");
 
-  //Solicitud para obtener el perfil de otro usuario
   useEffect(() => {
     const handleFriendProfile = async () => {
       try {
@@ -34,13 +49,10 @@ const FriendProfile = () => {
           const DataFriend = await response.json();
           setFriendData(DataFriend.user);
           setPosts(DataFriend.posts);
-          setIsFriend(DataFriend.isFriend); // Verificar si el usuario actual es amigo del perfil
-          setMessage("Perfil del amigo cargado");
-        } else {
-          setMessage("Error al cargar el perfil del amigo");
+          setIsFriend(DataFriend.isFriend);
         }
       } catch (error) {
-        setMessage("Error en el servidor");
+        console.error("Error en el servidor");
       }
     };
 
@@ -51,17 +63,26 @@ const FriendProfile = () => {
 
   const handleOpenModal = (post) => {
     setSelectedPost(post);
+    loadComments(post.comments);
   };
 
   const handleCloseModal = () => {
     setSelectedPost(null);
+    setComments([]);
+  };
+
+  const loadComments = async (commentIds) => {
+    if (commentIds && commentIds.length > 0) {
+      const commentsData = await fetchCommentsDetails(commentIds, token);
+      setComments(commentsData.filter(comment => comment));
+    }
   };
 
   const handleFriendAction = async () => {
     try {
-      const action = isFriend ? "remove-friend" : "add-friend"; //Agregar o eliminar, dependiendo si ya es amigo.
+      const action = isFriend ? "remove-friend" : "add-friend";
       const response = await fetch(
-        `http://localhost:3001/api/user/${action}/${friendId}`, //URL dinámica, segun lo que hagamos (agregar o eliminar amigo).
+        `http://localhost:3001/api/user/${action}/${friendId}`,
         {
           method: "POST",
           headers: {
@@ -73,18 +94,10 @@ const FriendProfile = () => {
       );
 
       if (response.ok) {
-        setIsFriend(!isFriend); // Alternar el estado de amistad
-        setMessage(
-          isFriend
-            ? "Amigo eliminado con éxito"
-            : "Solicitud de amistad enviada"
-        );
-      } else {
-        const errorData = await response.json();
-        setMessage(errorData.message || "Error al gestionar la amistad");
+        setIsFriend(!isFriend);
       }
     } catch (error) {
-      setMessage("Error en el servidor");
+      console.error("Error en el servidor");
     }
   };
 
@@ -150,14 +163,19 @@ const FriendProfile = () => {
               id={selectedPost.id}
               photo={selectedPost.imageUrl}
               description={selectedPost.caption}
+              Likes={selectedPost.likes.length}
+              Comments={comments}
+              isProfileView={false} 
+              onDelete={null}
+              refreshComments={loadComments} 
             />
           </div>
         </Modal>
       )}
 
-      <p>{message}</p>
       <PersistentDrawerLeft />
     </div>
   );
 };
+
 export default FriendProfile;
