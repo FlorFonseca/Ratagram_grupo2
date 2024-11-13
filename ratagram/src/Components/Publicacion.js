@@ -40,27 +40,6 @@ const handleLikes = async (id) => {
   }
 };
 
-const handleComments = async (id, content) => {
-  try {
-    const response = await fetch(
-      `http://localhost:3001/api/posts/${id}/comments`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ content }),
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Error al comentar");
-    }
-    return await response.json();
-  } catch (error) {
-    console.log("error en handleComments", error);
-  }
-};
 
 const Publicacion = ({
   id,
@@ -118,18 +97,50 @@ const Publicacion = ({
     }
   };
 
+
   const handleCommentSubmit = async () => {
     if (commentInput.trim() === "") return;
-    const commentPosted = await handleComments(id, commentInput);
-    if (commentPosted) {
-      setCommentInput("");
-      if (refreshComments) {
-        refreshComments();  // Llama a la función de refresco de comentarios
+
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/posts/${id}/comments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ content: commentInput }),
+        }
+      );
+
+      if (response.ok) {
+        const commentData = await response.json();
+
+        // Fetch para obtener los detalles completos del comentario, incluyendo el usuario
+        const fullCommentResponse = await fetch(
+          `http://localhost:3001/api/posts/comments/${commentData._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (fullCommentResponse.ok) {
+          const fullCommentData = await fullCommentResponse.json();
+          setComments((prevComments) => [...prevComments, fullCommentData]);
+          setCommentInput("");
+        } else {
+          console.error("Error al obtener los detalles del comentario");
+        }
       } else {
-        setComments((prevComments) => [...prevComments, commentPosted]); // Agrega directamente en el caso de no tener refreshComments
+        console.error("Error al crear el comentario");
       }
+    } catch (error) {
+      console.error("Error en handleCommentSubmit:", error);
     }
-  };
+  }; 
 
   return (
     <div className="Publicacion">
