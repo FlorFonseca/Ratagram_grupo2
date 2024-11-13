@@ -56,7 +56,7 @@ export default function MyFeed() {
               refreshFeed={handleFeed}
               photo={post.imageUrl}
               description={post.caption}
-              Likes={post.likes ? post.likes.length : 0}
+              Likes={post.likes}
               Comments={post.comments}
             />
           ))

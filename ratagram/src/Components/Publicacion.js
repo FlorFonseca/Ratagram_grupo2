@@ -9,20 +9,27 @@ const fetchCommentsDetails = async (commentIds, token) => {
   return await Promise.all(
     (commentIds || []).map(async (commentId) => {
       if (!commentId) return null;
-      const response = await fetch(`http://localhost:3001/api/posts/comments/${commentId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:3001/api/posts/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.ok) {
         return await response.json();
       }
-      return { _id: commentId, user: { username: "Usuario desconocido" }, content: "Comentario no disponible" };
+      return {
+        _id: commentId,
+        user: { username: "Usuario desconocido" },
+        content: "Comentario no disponible",
+      };
     })
   );
 };
 
-const handleLikes = async (id) => {
+const handleAddLikes = async (id) => {
   try {
     const response = await fetch(`http://localhost:3001/api/posts/${id}/like`, {
       method: "POST",
@@ -31,15 +38,31 @@ const handleLikes = async (id) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    if (!response.ok) {
-      throw new Error("Error al dar like");
-    }
+
     return await response.json();
   } catch (error) {
-    console.log("error en handleLikes", error);
+    console.log("error en handleAddlikes");
   }
 };
 
+const handleDeleteLike = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:3001/api/posts/${id}/like`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error al sacar el like");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.log("error en handleDeleteLikes");
+  }
+};
 
 const Publicacion = ({
   id,
@@ -55,7 +78,10 @@ const Publicacion = ({
   refreshComments,
 }) => {
   const { user } = useAuth();
-  const [likes, setLikes] = useState(Likes || 0);
+  const [likes, setLikes] = useState(Likes.length || 0);
+  const [isAlreadyLiked, setIsAlreadyLiked] = useState(
+    Likes.some((like) => like === user.id)
+  );
   const [commentInput, setCommentInput] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
@@ -67,7 +93,7 @@ const Publicacion = ({
       if (Comments && Comments.length > 0) {
         if (typeof Comments[0] === "string") {
           const commentsData = await fetchCommentsDetails(Comments, token);
-          setComments(commentsData.filter(comment => comment));
+          setComments(commentsData.filter((comment) => comment));
         } else {
           setComments(Comments);
         }
@@ -77,9 +103,18 @@ const Publicacion = ({
   }, [Comments, token]);
 
   const handleLikeClick = async () => {
-    const postData = await handleLikes(id);
-    if (postData && postData.likes) {
-      setLikes(postData.likes.length);
+    if (isAlreadyLiked) {
+      const dataPost = await handleDeleteLike(id);
+      if (dataPost && dataPost.likes) {
+        setLikes(dataPost.likes.length);
+        setIsAlreadyLiked(false);
+      }
+    } else {
+      const postData = await handleAddLikes(id);
+      if (postData && postData.likes) {
+        setLikes(postData.likes.length);
+        setIsAlreadyLiked(true);
+      }
     }
   };
 
@@ -96,7 +131,6 @@ const Publicacion = ({
       navigate(`/friendprofile/${userId}`);
     }
   };
-
 
   const handleCommentSubmit = async () => {
     if (commentInput.trim() === "") return;
@@ -140,7 +174,7 @@ const Publicacion = ({
     } catch (error) {
       console.error("Error en handleCommentSubmit:", error);
     }
-  }; 
+  };
 
   return (
     <div className="Publicacion">
@@ -165,7 +199,10 @@ const Publicacion = ({
         {isProfileView && (
           <button onClick={handleDeleteClick}>Eliminar Publicación</button>
         )}
-        <p className="verComentarios" onClick={() => setShowComments(!showComments)}>
+        <p
+          className="verComentarios"
+          onClick={() => setShowComments(!showComments)}
+        >
           {showComments ? "Ver menos" : "Ver más"}
         </p>
         {showComments && (
@@ -173,7 +210,11 @@ const Publicacion = ({
             {comments.map((comment) => (
               <div key={comment._id} className="comment">
                 <p>
-                  @{comment.user && comment.user.username ? comment.user.username : "Usuario desconocido"}: {comment.content}
+                  @
+                  {comment.user && comment.user.username
+                    ? comment.user.username
+                    : "Usuario desconocido"}
+                  : {comment.content}
                 </p>
               </div>
             ))}
@@ -196,4 +237,3 @@ const Publicacion = ({
 };
 
 export default Publicacion;
-

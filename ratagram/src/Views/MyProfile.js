@@ -215,7 +215,7 @@ const MyProfile = () => {
             username={userData?.username}
             photo={selectedPost.imageUrl}
             description={selectedPost.caption}
-            Likes={selectedPost.likes.length}
+            Likes={selectedPost.likes}
             Comments={selectedPost.comments}
             onAddComment={(content) => console.log("Add comment:", content)}
           />
