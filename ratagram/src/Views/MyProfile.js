@@ -1,8 +1,3 @@
-/**
- * Manejo para ver el perfil del usuario, usamos el contexto creado con la autenticación, para saber que efectivamente es la cuenta del usuario
- * logueado. Aquí manejamos la información como el nombre de usuario, foto de perfil, descripción, la posibilidad de editar la foto de perfil,
- * obtener los amigos del usuario y obtener los posts que ha hecho el mismo.
- */
 import React, { useState, useEffect } from "react";
 import ProfilePublicacion from "../Components/ProfilePublicacion";
 import { useAuth } from "../auth/AuthProvider";
@@ -13,11 +8,9 @@ import PersistentDrawerLeft from "../Components/Drawer";
 
 const MyProfile = () => {
   const { user } = useAuth();
-  console.log("user", user);
   const [userData, setUserData] = useState(null);
-  console.log("usesrData", userData);
   const [posts, setPosts] = useState([]);
-  const [friend, setFriends] = useState([]);
+  const [friends, setFriends] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [postsStatistics, setPostsStatistics] = useState(0);
   const [friendsStatistics, setFriendsStatistics] = useState(0);
@@ -26,7 +19,7 @@ const MyProfile = () => {
   const [newProfilePicture, setNewProfilePicture] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [message, setMessage] = useState("");
-  const token = localStorage.getItem("token"); //obtenemos el token del usuario, lo decodificamos con jwtDecode para poder obtener el id
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (!user.id) return;
@@ -44,12 +37,12 @@ const MyProfile = () => {
         if (response.ok) {
           const DataUser = await response.json();
           setUserData(DataUser.user);
-          setFriends(DataUser.user.friends); //guardamos los amigos del usuario
-          setPosts(DataUser.posts); //guardamos los posts del usuario
+          setFriends(DataUser.user.friends);
+          setPosts(DataUser.posts);
           setPostsStatistics(DataUser.posts.length);
-          setFriendsStatistics(DataUser.user.friends.length); //estas estadísticas nos dicen cuántos posts ha hecho el usuario y cuándos amigos tiene
+          setFriendsStatistics(DataUser.user.friends.length);
           setNewUsername(DataUser.user.username);
-          setNewProfilePicture(DataUser.user.profileImage); //estos indican los valores iniciales de username y profileimage para despues poder editarlos
+          setNewProfilePicture(DataUser.user.profileImage);
           setNewDescription(DataUser.user.description);
           setMessage("Perfil cargado");
         }
@@ -61,10 +54,6 @@ const MyProfile = () => {
     handleProfile();
   }, [user, token]);
 
-  if (!user) {
-    return <div>Cargando perfil...</div>;
-  }
-
   const handleOpenModal = (post) => {
     setSelectedPost(post);
   };
@@ -74,7 +63,7 @@ const MyProfile = () => {
   };
 
   const handleEditClick = () => {
-    setIsEditing(!isEditing); // cambia entre vista y edición
+    setIsEditing(!isEditing);
   };
 
   const handleEditProfile = async () => {
@@ -98,7 +87,7 @@ const MyProfile = () => {
       if (response.ok) {
         const updatedData = await response.json();
         setUserData(updatedData.user);
-        setIsEditing(false); // salir del modo edición
+        setIsEditing(false);
         setMessage("Perfil actualizado con éxito");
       } else {
         setMessage("Error al actualizar el perfil");
@@ -137,7 +126,7 @@ const MyProfile = () => {
               src={userData?.profileImage || "img"}
               alt="perfil"
               className="profile-pic-img"
-            ></img>
+            />
           ) : (
             <svg
               className="default-profile-pic"
@@ -203,7 +192,7 @@ const MyProfile = () => {
           <button onClick={handleEditClick}>Edit Profile</button>
         )}
       </div>
-      {/* ProfilePublicacion es un tipo de publicación que solo está en el perfil, solo muestra las imágenes que ha subido el usuario */}
+
       <div className="profile-posts">
         {posts.length > 0 ? (
           posts.map((post) => (
@@ -218,21 +207,21 @@ const MyProfile = () => {
           <p>No hay publicaciones</p>
         )}
       </div>
-      {/* En este modal, al hacer click en la ProfilePublicacion, se muestra la publicacion del usuario por completo */}
+
       {selectedPost && (
         <Modal onClose={handleCloseModal}>
-          <div className="modal-post">
-            <Publicacion
-              username={userData?.username}
-              id={selectedPost.id}
-              photo={selectedPost.imageUrl}
-              description={selectedPost.caption}
-              Likes={selectedPost.likes.length}
-              Comments={selectedPost.comments}
-            ></Publicacion>
-          </div>
+          <Publicacion
+            id={selectedPost._id}
+            username={userData?.username}
+            photo={selectedPost.imageUrl}
+            description={selectedPost.caption}
+            Likes={selectedPost.likes.length}
+            Comments={selectedPost.comments}
+            onAddComment={(content) => console.log("Add comment:", content)}
+          />
         </Modal>
       )}
+
       <PersistentDrawerLeft />
     </div>
   );
