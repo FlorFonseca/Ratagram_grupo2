@@ -118,7 +118,11 @@ const FriendProfile = () => {
       <div className="profile-header">
         <div className="profile-pic">
           {friendData.profileImage ? (
-            <img src={friendData.profileImage} alt="perfil" />
+            <img
+              src={`http://localhost:3001/${friendData?.profileImage}` || "img"}
+              alt="perfil"
+              className="profile-pic-img"
+            />
           ) : (
             <svg
               className="default-profile-pic"
@@ -156,15 +160,17 @@ const FriendProfile = () => {
             <h5>Posts</h5>
             <p>{posts.length}</p>
           </div>
-        </div>
-        <div>
-          <h5>Friends</h5>
-          <p>{friendData.friends.length}</p>
+          <div>
+            <h5>Friends</h5>
+            <p>{friendData.friends.length}</p>
+          </div>
         </div>
       </div>
 
       <div className="profile-editBtn">
-        <button onClick={handleFriendAction}>{friendshipButton}</button>
+        <button className="editingBtn" onClick={handleFriendAction}>
+          {friendshipButton}
+        </button>
       </div>
 
       <div className="profile-posts">

@@ -42,7 +42,7 @@ const MyProfile = () => {
           setPostsStatistics(DataUser.posts.length);
           setFriendsStatistics(DataUser.user.friends.length);
           setNewUsername(DataUser.user.username);
-          setNewProfilePicture(DataUser.user.profileImage);
+          setNewProfilePicture(DataUser.user.profilePicture);
           setNewDescription(DataUser.user.description);
           setMessage("Perfil cargado");
         }
@@ -121,9 +121,9 @@ const MyProfile = () => {
               onChange={(e) => setNewProfilePicture(e.target.value)}
               placeholder="URL de la nueva imagen"
             />
-          ) : userData?.profileImage ? (
+          ) : userData?.profilePicture ? (
             <img
-              src={`http://localhost:3001/${userData?.profileImage}` || "img"}
+              src={userData.profilePicture} 
               alt="perfil"
               className="profile-pic-img"
             />
@@ -197,8 +197,8 @@ const MyProfile = () => {
         {posts.length > 0 ? (
           posts.map((post) => (
             <ProfilePublicacion
-              key={post.id}
-              id={post.id}
+              key={post._id}
+              id={post._id}
               photo={post.imageUrl}
               onClick={() => handleOpenModal(post)}
             />

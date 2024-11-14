@@ -1,23 +1,30 @@
+/* Variables de tamaño escalable */
+:root {
+  --font-scale: 1vw;
+  --profile-pic-size: 10vw;
+  --button-padding: 1vw;
+}
+
 .profile-container {
   max-width: 90vw;
   margin: 0 auto;
   min-height: 100vh;
   background-color: #fff;
-  padding: 20px;
+  padding: 2vw;
   box-sizing: border-box;
 }
 
 .profile-header {
   display: flex;
   align-items: flex-start;
-  gap: 20px;
+  gap: 2vw;
   flex-wrap: wrap;
   margin-bottom: 2em;
 }
 
 .profile-pic {
-  width: 100px;
-  height: 100px;
+  width: var(--profile-pic-size);
+  height: var(--profile-pic-size);
   overflow: hidden;
   border-radius: 50%;
   background-color: #f0f0f0;
@@ -39,22 +46,22 @@
 }
 
 .littleUserName {
-  margin: 2px;
+  margin: 0.2vw;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 3vw; /* Tamaño de fuente relativo al ancho de la pantalla */
 }
 
 .description {
-  font-size: 0.9em;
+  font-size: 2.2vw; /* Tamaño de fuente relativo al ancho de la pantalla */
   color: #666;
 }
 
 .profile-stats {
   flex: 1;
   display: flex;
-  gap: 2em;
+  gap: 2vw;
   text-align: center;
-  font-size: 1em;
+  font-size: 2.5vw; /* Tamaño de fuente relativo al ancho de la pantalla */
   justify-content: flex-start;
 }
 
@@ -67,7 +74,7 @@
 }
 
 .editingBtn {
-  margin: 5px;
+  margin: 0.5vw;
 }
 
 .profile-editBtn button {
@@ -75,9 +82,10 @@
   background-color: #f0f0f0;
   color: #333;
   border: none;
-  padding: 10px;
+  padding: var(--button-padding);
   border-radius: 8px;
   cursor: pointer;
+  font-size: 2vw; /* Tamaño de fuente relativo al ancho de la pantalla */
   transition: background-color 0.3s;
 }
 
@@ -87,7 +95,7 @@
 
 .profile-posts {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
   gap: 2px;
   margin-top: 1em;
 }
@@ -111,42 +119,39 @@
 }
 
 /* Pantallas medianas - máximo 1024px */
-@media (max-width: 1024px) {
-  .profile-container {
-    max-width: 95vw;
+@media (max-width: 1023px) {
+  :root {
+    --font-scale: 1.2vw;
+    --profile-pic-size: 12vw;
+    --button-padding: 1.5vw;
   }
 
-  .profile-info {
-    margin: 0;
-  }
-
-  .profile-posts {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  .littleUserName, .profile-stats, .profile-editBtn button {
+    font-size: 3vw;
   }
 }
 
 /* Pantallas entre 768px y 480px */
 @media (max-width: 768px) {
-  .profile-container {
-    padding: 20px;
+  :root {
+    --font-scale: 2vw;
+    --profile-pic-size: 15vw;
+    --button-padding: 2vw;
   }
 
-  .profile-pic {
-    width: 80px;
-    height: 80px;
-  }
-
-  .profile-stats {
-    gap: 1em;
-  }
-
-  .profile-posts {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  .littleUserName, .profile-stats, .profile-editBtn button {
+    font-size: 4vw;
   }
 }
 
 /* Pantallas pequeñas - máximo 480px */
 @media (max-width: 480px) {
+  :root {
+    --font-scale: 3vw;
+    --profile-pic-size: 20vw;
+    --button-padding: 2.5vw;
+  }
+
   .profile-container {
     padding: 15px;
   }
@@ -156,14 +161,8 @@
     align-items: center;
   }
 
-  .profile-pic {
-    width: 70px;
-    height: 70px;
-  }
-
-  .littleUserName {
-    text-align: center;
-    font-size: 1.1em;
+  .littleUserName, .profile-stats, .profile-editBtn button {
+    font-size: 5vw;
   }
 
   .profile-info {
@@ -171,25 +170,22 @@
     margin: 0;
     text-align: center;
   }
-
-  .profile-stats {
-    gap: 1em;
-  }
-
-  .profile-posts {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 /* Pantallas muy pequeñas - máximo 320px */
 @media (max-width: 320px) {
-  .profile-container {
-    padding: 10px;
+  :root {
+    --font-scale: 4vw;
+    --profile-pic-size: 25vw;
+    --button-padding: 3vw;
   }
 
-  .profile-pic {
-    width: 60px;
-    height: 60px;
+  .littleUserName, .profile-stats, .profile-editBtn button {
+    font-size: 6vw;
+  }
+
+  .profile-container {
+    padding: 10px;
   }
 
   .profile-posts {
