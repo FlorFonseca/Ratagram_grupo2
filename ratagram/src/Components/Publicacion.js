@@ -184,7 +184,7 @@ const Publicacion = ({
         </button>
         <img
           className="publicacion-photo"
-          src={photo}
+          src={`http://localhost:3001/${photo}`}
           style={{ width: 250 }}
           alt="photo"
         />

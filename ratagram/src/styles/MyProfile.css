@@ -1,4 +1,3 @@
-
 .profile-container {
   max-width: 90vw;
   margin: 0 auto;
@@ -35,7 +34,7 @@
 
 .profile-info {
   display: flex;
-  flex:1;
+  flex: 1;
   flex-direction: column;
 }
 
@@ -51,7 +50,7 @@
 }
 
 .profile-stats {
-  flex:1;
+  flex: 1;
   display: flex;
   gap: 2em;
   text-align: center;
@@ -59,7 +58,7 @@
   justify-content: flex-start;
 }
 
-.profile-stats p{
+.profile-stats p {
   color: #666;
 }
 
@@ -67,8 +66,8 @@
   margin-top: 1em;
 }
 
-.editingBtn{
-  margin:5px;
+.editingBtn {
+  margin: 5px;
 }
 
 .profile-editBtn button {
@@ -88,18 +87,27 @@
 
 .profile-posts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 5px;
+  grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+  gap: 2px;
   margin-top: 1em;
 }
 
 .user-publicacion {
+  position: relative;
   width: 100%;
   padding-bottom: 100%;
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f0f0f0;
+}
+
+.user-publicacion img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Pantallas medianas - máximo 1024px */
@@ -130,6 +138,10 @@
 
   .profile-stats {
     gap: 1em;
+  }
+
+  .profile-posts {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   }
 }
 

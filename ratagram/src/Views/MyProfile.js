@@ -123,7 +123,7 @@ const MyProfile = () => {
             />
           ) : userData?.profileImage ? (
             <img
-              src={userData?.profileImage || "img"}
+              src={`http://localhost:3001/${userData?.profileImage}` || "img"}
               alt="perfil"
               className="profile-pic-img"
             />
