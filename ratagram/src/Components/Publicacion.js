@@ -1,22 +1,35 @@
-/*Manejo para ver y guardar los posts que hace un usuario, estos se deberán mostrar en MyProfile
- */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Publicacion.css";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 
-// const deletePublicacion = async (id) => {
-//   const publicacionDelete = await fetch(`http://localhost:3001/api/posts/${id}`, {
-//     method: "DELETE",
-//   });
+const fetchCommentsDetails = async (commentIds, token) => {
+  return await Promise.all(
+    (commentIds || []).map(async (commentId) => {
+      if (!commentId) return null;
+      const response = await fetch(
+        `http://localhost:3001/api/posts/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        return await response.json();
+      }
+      return {
+        _id: commentId,
+        user: { username: "Usuario desconocido" },
+        content: "Comentario no disponible",
+      };
+    })
+  );
+};
 
-//   return publicacionDelete;
-// };
-
-const handleLikes = async (id) => {
+const handleAddLikes = async (id) => {
   try {
     const response = await fetch(`http://localhost:3001/api/posts/${id}/like`, {
       method: "POST",
@@ -25,39 +38,32 @@ const handleLikes = async (id) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    if (!response.ok) {
-      throw new Error("Error al dar like");
-    }
 
     return await response.json();
   } catch (error) {
-    console.log("error en handlelikes");
+    console.log("error en handleAddlikes");
   }
 };
 
-const handleComments = async (id, content) => {
+const handleDeleteLike = async (id) => {
   try {
-    const response = await fetch(
-      `http://localhost:3001/api/posts/${id}/comments`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ content }),
-      }
-    );
+    const response = await fetch(`http://localhost:3001/api/posts/${id}/like`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
     if (!response.ok) {
-      throw new Error("Error al comentar");
+      throw new Error("Error al sacar el like");
     }
+
     return await response.json();
   } catch (error) {
-    console.log("error en handleComments", error);
+    console.log("error en handleDeleteLikes");
   }
 };
 
-//Le pasamos como prop isProfileView para saber si es una foto de nuestro perfil, esto nos sirve para poder tener permiso para borrarla.
 const Publicacion = ({
   id,
   username,
@@ -69,25 +75,52 @@ const Publicacion = ({
   isProfileView,
   refreshFeed,
   onDelete,
+  refreshComments,
 }) => {
   const { user } = useAuth();
-  const [likes, setLikes] = useState(Likes || 0);
+  const [likes, setLikes] = useState(Likes.length || 0);
+  const [isAlreadyLiked, setIsAlreadyLiked] = useState(
+    Likes.some((like) => like === user.id)
+  );
   const [commentInput, setCommentInput] = useState("");
   const [showComments, setShowComments] = useState(false);
-  const [comments, setComments] = useState(Comments);
+  const [comments, setComments] = useState([]);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-  //Manejador para eliminar una publicación:
-  const handleDeleteClick = async () => {
-    if (isProfileView && onDelete) {
-      onDelete(id); //Se puede llamar a la función de eliminación si estamos en la vista del perfil.
+  useEffect(() => {
+    const loadComments = async () => {
+      if (Comments && Comments.length > 0) {
+        if (typeof Comments[0] === "string") {
+          const commentsData = await fetchCommentsDetails(Comments, token);
+          setComments(commentsData.filter((comment) => comment));
+        } else {
+          setComments(Comments);
+        }
+      }
+    };
+    loadComments();
+  }, [Comments, token]);
+
+  const handleLikeClick = async () => {
+    if (isAlreadyLiked) {
+      const dataPost = await handleDeleteLike(id);
+      if (dataPost && dataPost.likes) {
+        setLikes(dataPost.likes.length);
+        setIsAlreadyLiked(false);
+      }
+    } else {
+      const postData = await handleAddLikes(id);
+      if (postData && postData.likes) {
+        setLikes(postData.likes.length);
+        setIsAlreadyLiked(true);
+      }
     }
   };
 
-  const handleLikeClick = async () => {
-    const postData = await handleLikes(id);
-    if (postData && postData.likes) {
-      setLikes(postData.likes.length);
+  const handleDeleteClick = async () => {
+    if (isProfileView && onDelete) {
+      onDelete(id);
     }
   };
 
@@ -99,20 +132,48 @@ const Publicacion = ({
     }
   };
 
-  const handleCommentsClick = async () => {
-    if (!commentInput.trim()) {
-      //para que no acepte comentarios vacíos
-      return;
-    }
-    const commentPosted = await handleComments(id, commentInput);
-    if (commentPosted) {
-      setComments([...comments, commentPosted]);
-      setCommentInput("");
-    }
-  };
+  const handleCommentSubmit = async () => {
+    if (commentInput.trim() === "") return;
 
-  const toShowComments = async () => {
-    setShowComments(!showComments);
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/posts/${id}/comments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ content: commentInput }),
+        }
+      );
+
+      if (response.ok) {
+        const commentData = await response.json();
+
+        // Fetch para obtener los detalles completos del comentario, incluyendo el usuario
+        const fullCommentResponse = await fetch(
+          `http://localhost:3001/api/posts/comments/${commentData._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (fullCommentResponse.ok) {
+          const fullCommentData = await fullCommentResponse.json();
+          setComments((prevComments) => [...prevComments, fullCommentData]);
+          setCommentInput("");
+        } else {
+          console.error("Error al obtener los detalles del comentario");
+        }
+      } else {
+        console.error("Error al crear el comentario");
+      }
+    } catch (error) {
+      console.error("Error en handleCommentSubmit:", error);
+    }
   };
 
   return (
@@ -126,32 +187,35 @@ const Publicacion = ({
           src={photo}
           style={{ width: 250 }}
           alt="photo"
-        ></img>
+        />
         <p className="publicacion-description">{description}</p>
-        <div className="publicacion-comment-section">
-          <input
-            type="text"
-            value={commentInput}
-            onChange={(e) => setCommentInput(e.target.value)}
-            placeholder="Escribe un comentario..."
-            className="comment-input"
-          />
-        </div>
+        <input
+          type="text"
+          value={commentInput}
+          onChange={(e) => setCommentInput(e.target.value)}
+          placeholder="Escribe un comentario..."
+          className="comment-input"
+        />
         {isProfileView && (
-          <button onClick={handleDeleteClick}>Eliminar Publicación.</button>
+          <button onClick={handleDeleteClick}>Eliminar Publicación</button>
         )}
-        <p className="verComentarios" onClick={toShowComments}>
+        <p
+          className="verComentarios"
+          onClick={() => setShowComments(!showComments)}
+        >
           {showComments ? "Ver menos" : "Ver más"}
         </p>
         {showComments && (
           <div className="publicacion-comentarios">
             {comments.map((comment) => (
-              <div key={comment.id} className="comment">
+              <div key={comment._id} className="comment">
                 <p>
-                  @{comment.user}: {comment.content}
+                  @
+                  {comment.user && comment.user.username
+                    ? comment.user.username
+                    : "Usuario desconocido"}
+                  : {comment.content}
                 </p>
-
-                {/**En este caso, como no podemos acceder al username de user, dejamos el id, lo ideal sería poder acceder alnombre de usuario de quién hace el comentario */}
               </div>
             ))}
           </div>
@@ -159,11 +223,10 @@ const Publicacion = ({
         <div className="publicacion-wrapp-buttons">
           <button className="publicacion-like-button" onClick={handleLikeClick}>
             <FavoriteBorderIcon /> {likes}
-            {/*Para mostrar la cantidad de likes de la publicación*/}
           </button>
           <button
             className="publicacion-comment-button"
-            onClick={handleCommentsClick}
+            onClick={handleCommentSubmit}
           >
             <MapsUgcRoundedIcon />
           </button>
@@ -172,4 +235,5 @@ const Publicacion = ({
     </div>
   );
 };
+
 export default Publicacion;
